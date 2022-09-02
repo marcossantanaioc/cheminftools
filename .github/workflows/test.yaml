@@ -5,7 +5,5 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-        - run: conda install -c conda-forge chembl_structure_pipeline
-        - uses: actions/checkout@v2/fastai/workflows/nbdev-ci@master
-        - run: conda install -c conda-forge chembl_structure_pipeline
+        - uses: fastai/workflows/nbdev-ci@master
         
