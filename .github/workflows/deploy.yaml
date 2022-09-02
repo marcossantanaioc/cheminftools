@@ -20,11 +20,6 @@ jobs:
           auto-update-conda: true
           auto-activate-base: true
       - name: Install chembl_structure_pipeline
-        run: |
-            echo "begin: PATH=$PATH;"
-
+        run:
             conda install -c conda-forge chembl_structure_pipeline
-
-            conda activate chembl_structure_pipeline || true
-            echo "after conda activate chembl_structure_pipeline: PATH=$PATH;"
     steps: [uses: fastai/workflows/quarto-ghp@master]
