@@ -15,7 +15,7 @@ from typing import List, Collection
 import multiprocessing as mp
 from tqdm import tqdm
 
-# %% ../../notebooks/featurizer.ipynb 6
+# %% ../../notebooks/featurizer.ipynb 8
 def get_rdkit2d_descriptors(mol:Chem.rdchem.Mol):
     
     """
@@ -34,7 +34,7 @@ def get_rdkit2d_descriptors(mol:Chem.rdchem.Mol):
     descs = np.array([func(mol) for name,func in descriptor_dict.items()]).reshape(1, -1)
     return descs
 
-# %% ../../notebooks/featurizer.ipynb 7
+# %% ../../notebooks/featurizer.ipynb 10
 class MolFeaturizer:
     
     """Creates a Fingerprinter to perform molecular featurization

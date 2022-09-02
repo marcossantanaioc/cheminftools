@@ -8,7 +8,7 @@ import numpy as np
 from rdkit import Chem
 from rdkit.Chem import rdchem
 
-# %% ../notebooks/utils.ipynb 4
+# %% ../notebooks/utils.ipynb 5
 def convert_smiles(mol, sanitize=False):
     if isinstance(mol, str):
         try:

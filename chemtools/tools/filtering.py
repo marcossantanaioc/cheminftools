@@ -16,7 +16,7 @@ from rdkit.Chem import AllChem,rdMolDescriptors
 from rdkit.Chem.FilterCatalog import FilterCatalog, FilterCatalogParams
 from typing import List, Collection
 
-# %% ../../notebooks/filtering.ipynb 4
+# %% ../../notebooks/filtering.ipynb 5
 class MolFiltering:
     
     """Filter a molecular dataset from unwanted structures
