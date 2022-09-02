@@ -1,0 +1,834 @@
+{
+    "structural_alerts": {
+        "C1(C)(C)SC(C(=O)O)=C(C(=O)O)S1": [
+            "SureChEMBL",
+            "2,2-dimethyl-4,5-dicarboxy-dithiole",
+            0
+        ],
+        "c([OH])c([OH])c([OH])": [
+            "SureChEMBL",
+            "2,3,4_trihydroxyphenyl",
+            0
+        ],
+        "c([OH])c([OH])cc([OH])": [
+            "SureChEMBL",
+            "2,3,5_trihydroxyphenyl",
+            0
+        ],
+        "C(=O)OC(=O)": [
+            "SureChEMBL",
+            "acid_anhydrides",
+            0
+        ],
+        "[S,C](=[O,S])[F,Br,Cl,I]": [
+            "SureChEMBL",
+            "acid_halides",
+            0
+        ],
+        "c1c2cc4ccccc4nc2ccc1": [
+            "SureChEMBL",
+            "Acridine",
+            0
+        ],
+        "P(=S)([OH1,O$(O[#6])])([OH1,O$(O[#6])])[S,O]": [
+            "SureChEMBL",
+            "Active_Phosphate",
+            0
+        ],
+        "C(=O)-C#N": [
+            "SureChEMBL",
+            "acyl_cyanide",
+            0
+        ],
+        "[*;R]=[*;R]=[*;R]": [
+            "SureChEMBL",
+            "Adjacent_Ring_Double_Bonds",
+            0
+        ],
+        "[#6][C!H0]=O": [
+            "SureChEMBL",
+            "Aldehyde",
+            0
+        ],
+        "COS(=O)(=O)C(F)(F)F": [
+            "SureChEMBL",
+            "Aliphatic_Triflate",
+            0
+        ],
+        "[Br,Cl,I][CX4;CH,CH2]": [
+            "SureChEMBL",
+            "alkyl_halides",
+            0
+        ],
+        "[C;H1$(C([#6;!$(C=O)])),H0$(C([#6;!$(C=O)])[#6;!$(C=O)])]=[CH1]!@N([#6;!$(C(=O))])[#6;!$(C(=O))]": [
+            "SureChEMBL",
+            "AlkylEnamine",
+            0
+        ],
+        "*=C=*": [
+            "SureChEMBL",
+            "Allene",
+            0
+        ],
+        "[C;!$(C[N])](=O)!@[C;h1,h2;H1,H2][F,Cl,Br,I]": [
+            "SureChEMBL",
+            "Alpha_Halo_Carbonyl",
+            0
+        ],
+        "c1nnnn1C=O": [
+            "SureChEMBL",
+            "amidotetrazole",
+            0
+        ],
+        "c1(N)ccc(C(=O)NC3(=O))c(c3ccc2)c21": [
+            "SureChEMBL",
+            "Amino_Naphtalimide",
+            0
+        ],
+        "NC#N": [
+            "SureChEMBL",
+            "Aminonitrile",
+            0
+        ],
+        "[#6]C(=O)OC(=O)[#6]": [
+            "SureChEMBL",
+            "Anhydride",
+            0
+        ],
+        "O=*N=[N+]=[N-]": [
+            "SureChEMBL",
+            "Any_Carbazide",
+            0
+        ],
+        "cN=N=N": [
+            "SureChEMBL",
+            "aromatic_azides",
+            0
+        ],
+        "N=[N+]([O-])C": [
+            "SureChEMBL",
+            "Azanitrone",
+            0
+        ],
+        "[N;R0]=[N;R0]CC=O": [
+            "SureChEMBL",
+            "azoalkanals",
+            0
+        ],
+        "c1ccccc1[N!r]=[N!r]c2ccccc2": [
+            "SureChEMBL",
+            "Azobenzene",
+            0
+        ],
+        "[N;R0]=[N;R0]C#N": [
+            "SureChEMBL",
+            "Azocyanamide",
+            0
+        ],
+        "C(=O)CC[N+,n+]": [
+            "SureChEMBL",
+            "b-Carbonyl_Quaternary_Nitrogen",
+            0
+        ],
+        "cC[N+,NX4]": [
+            "SureChEMBL",
+            "benzylic_quaternary_nitrogen",
+            0
+        ],
+        "C(=O)C[N+,n+,NX4,nX4]": [
+            "SureChEMBL",
+            "beta-carbonyl_quaternary_nitrogen",
+            0
+        ],
+        "[C;H2$(CF),H1$(C(F)F)]!@[CH2][N,O]": [
+            "SureChEMBL",
+            "Beta-Fluoro-ethyl-ON",
+            0
+        ],
+        "C12C(NC(N1)=O)CSC2": [
+            "SureChEMBL",
+            "biotin_analogue",
+            0
+        ],
+        "C(=O)N=N=N": [
+            "SureChEMBL",
+            "carbazides",
+            0
+        ],
+        "N=C=N": [
+            "SureChEMBL",
+            "carbodiimides",
+            0
+        ],
+        "C(Cl)(Cl)(Cl)C([O,S])[NX3]": [
+            "SureChEMBL",
+            "CCl3-CHO_releasing",
+            0
+        ],
+        "[Cl]C([C&R0])=N": [
+            "SureChEMBL",
+            "Chloramidine",
+            0
+        ],
+        "SC(=[!r])S": [
+            "SureChEMBL",
+            "Conjugated_Dithioether",
+            0
+        ],
+        "O1CCOCCOCCOCC1": [
+            "SureChEMBL",
+            "Crown_Ether_12CRO4",
+            0
+        ],
+        "O1CCOCCOCCOCCOCC1": [
+            "SureChEMBL",
+            "Crown_Ether_15CRO5",
+            0
+        ],
+        "O1CCOCCOCCOCCOCCOCC1": [
+            "SureChEMBL",
+            "Crown_Ether_16CRO6",
+            0
+        ],
+        "[O;R1][C;R1][C;R1][O;R1][C;R1][C;R1][O;R1]": [
+            "SureChEMBL",
+            "crown_ethers",
+            0
+        ],
+        "N[CH2]C#N": [
+            "SureChEMBL",
+            "cyanamide",
+            0
+        ],
+        "P(OCC)(OCC)(=O)C#N": [
+            "SureChEMBL",
+            "Cyanophosphonate",
+            0
+        ],
+        "N#CC[OH1]": [
+            "SureChEMBL",
+            "Cyanohydrin",
+            0
+        ],
+        "P(=O)([OH])OP(=O)[OH]": [
+            "SureChEMBL",
+            "di_and_triphosphates",
+            0
+        ],
+        "C#CC#C": [
+            "SureChEMBL",
+            "Diacetylene",
+            0
+        ],
+        "C=[N+]=[N-]": [
+            "SureChEMBL",
+            "Diazoalkane",
+            0
+        ],
+        "[N+]#N": [
+            "SureChEMBL",
+            "Diazonium_Salt",
+            0
+        ],
+        "C!@=[CH1]-C!@=[CH1]-[CX3](=O)": [
+            "SureChEMBL",
+            "Diene",
+            0
+        ],
+        "c1c([N+](=O)[O-])c([N+](=O)[O-])ccc1": [
+            "SureChEMBL",
+            "Dinitrobenzene_1",
+            0
+        ],
+        "c1c([N+](=O)[O-])ccc([N+](=O)[O-])c1": [
+            "SureChEMBL",
+            "Dinitrobenzene_2",
+            0
+        ],
+        "c1c([N+](=O)[O-])cc([N+](=O)[O-])cc1": [
+            "SureChEMBL",
+            "Dinitrobenzene_3",
+            0
+        ],
+        "[SX2][SX2]": [
+            "SureChEMBL",
+            "disulfides",
+            0
+        ],
+        "NC(=S)S": [
+            "SureChEMBL",
+            "Dithiocarbamate",
+            0
+        ],
+        "S1SC=CC1=S": [
+            "SureChEMBL",
+            "Dithiole-2-thione",
+            0
+        ],
+        "S1C=CSC1=C": [
+            "SureChEMBL",
+            "Dithiole-3-thione",
+            0
+        ],
+        "S[C;!$(C=*)]S": [
+            "SureChEMBL",
+            "Dithiomethylene_acetal",
+            0
+        ],
+        "C=!@CC#C": [
+            "SureChEMBL",
+            "Enyne",
+            0
+        ],
+        "C1[O,S,N]C1": [
+            "SureChEMBL",
+            "epoxides,_thioepoxides,_aziridines",
+            0
+        ],
+        "C(=O)Onnn": [
+            "SureChEMBL",
+            "ester_of_HOBT",
+            0
+        ],
+        "c1cccc(NC(=NC(=[N,S,O])NC(=O)3)C3=N2)c12": [
+            "SureChEMBL",
+            "Flavin",
+            0
+        ],
+        "c1cc(O)cc(OC(=CC(=O)C=C3)C3=C2)c12": [
+            "SureChEMBL",
+            "Fluorescein",
+            0
+        ],
+        "C(C(CF)F)F": [
+            "SureChEMBL",
+            "Fluorinated_Carbon_1",
+            0
+        ],
+        "C(C(F)F)(F)F": [
+            "SureChEMBL",
+            "Fluorinated_Carbon_2",
+            0
+        ],
+        "C1(=O)OCC1": [
+            "SureChEMBL",
+            "four_member_lactones",
+            0
+        ],
+        "[NH1;!r][CX4][NH1;!r]": [
+            "SureChEMBL",
+            "geminal_amines",
+            0
+        ],
+        "N#CCC#N": [
+            "SureChEMBL",
+            "geminal_dinitriles",
+            0
+        ],
+        "[Cl,Br,I]c1[c,n][c,n][c,n][c,n]n1": [
+            "SureChEMBL",
+            "halo-pyridine,_-diazoles_and_-triazoles",
+            0
+        ],
+        "N=NC(S)N": [
+            "SureChEMBL",
+            "hydrazothiourea",
+            0
+        ],
+        "c1[n+]([#6])ccn1([#6])": [
+            "SureChEMBL",
+            "Imidazolium",
+            0
+        ],
+        "[#6,#8,#16]-[CH1]=[NH1]": [
+            "SureChEMBL",
+            "Imine2",
+            0
+        ],
+        "[#6][C;R0](=[N;R0,O0])[#6]": [
+            "SureChEMBL",
+            "imines_(not_ring)",
+            0
+        ],
+        "N=C=[S,O]": [
+            "SureChEMBL",
+            "isocyanates_and_isothiocyanates",
+            0
+        ],
+        "[N+]#[C-]": [
+            "SureChEMBL",
+            "isonitrile",
+            0
+        ],
+        "C=C=O": [
+            "SureChEMBL",
+            "ketene",
+            0
+        ],
+        "P(=S)(S)S": [
+            "SureChEMBL",
+            "Lawesson_Reagent_Derivatives",
+            0
+        ],
+        "S1C=CSC1=S": [
+            "SureChEMBL",
+            "methylidene-1,3-dithiole",
+            0
+        ],
+        "c1ccccc1C(=O)C=!@CC(=O)!@*": [
+            "SureChEMBL",
+            "Michael_Phenyl_Ketone",
+            0
+        ],
+        "[NX3,NX4][F,Cl,Br,I]": [
+            "SureChEMBL",
+            "N-halo",
+            0
+        ],
+        "c1ccc(n[o,s]n2)c2c1[N+](=O)[O-]": [
+            "SureChEMBL",
+            "Nitrobenz-azadiazole_1",
+            0
+        ],
+        "c1c([N+](=O)[O-])cc(n[o,s]n2)c2c1": [
+            "SureChEMBL",
+            "Nitrobenz-azadiazole_2",
+            0
+        ],
+        "N-[N;X2](=O)": [
+            "SureChEMBL",
+            "nitrosamine",
+            0
+        ],
+        "[N&D2](=O)": [
+            "SureChEMBL",
+            "nitroso",
+            0
+        ],
+        "N1=C[S,NH1]C(=[C,N,P][C,N,O,P])C1(=O)": [
+            "SureChEMBL",
+            "noname",
+            0
+        ],
+        "[N+!$(N=O)][O-X1]": [
+            "SureChEMBL",
+            "N-Oxide_aliphatic",
+            0
+        ],
+        "[#6][S!$(S(~[OD1])~[OD1])][N;H0]": [
+            "SureChEMBL",
+            "N-S_(not_sulfonamides)",
+            0
+        ],
+        "C(O)(O)[OH]": [
+            "SureChEMBL",
+            "Orthoester",
+            0
+        ],
+        "c1c([OH1])c(C(C)(C)C)ccc1": [
+            "SureChEMBL",
+            "o-tertbutylphenol",
+            0
+        ],
+        "C1(=O)C=CCSC=C1": [
+            "SureChEMBL",
+            "Oxobenzothiepine",
+            0
+        ],
+        "[P,S][Cl,Br,F,I]": [
+            "SureChEMBL",
+            "P_or_S_Halides",
+            0
+        ],
+        "Nc1aaa(N!@=N)aa1": [
+            "SureChEMBL",
+            "p-Aminoaryl_diazo",
+            0
+        ],
+        "PCP": [
+            "SureChEMBL",
+            "PCP",
+            0
+        ],
+        "C(=O)Oc1ccc([N+](=O)[O-])cc1": [
+            "SureChEMBL",
+            "paranitrophenyl_esters",
+            0
+        ],
+        "c1c([F,Cl])c([F,Cl])c([F,Cl])c([F,Cl])c1([F,Cl])": [
+            "SureChEMBL",
+            "pentahalophenyl",
+            0
+        ],
+        "C(=O)Oc1c(F)c(F)c(F)c(F)c1(F)": [
+            "SureChEMBL",
+            "pentafluorophenyl_esters",
+            0
+        ],
+        "[#8]~[#8]": [
+            "SureChEMBL",
+            "peroxide",
+            0
+        ],
+        "c12cccc3c1c4c(cc3)cccc4cc2": [
+            "SureChEMBL",
+            "Phenanthrene",
+            0
+        ],
+        "C(=O)!@Oc1ccccc1": [
+            "SureChEMBL",
+            "Phenylester",
+            0
+        ],
+        "[#6]P(=O)(~O)O[#6]": [
+            "SureChEMBL",
+            "phosphonate_esters",
+            0
+        ],
+        "NP(=O)(N)N": [
+            "SureChEMBL",
+            "phosphoramides",
+            0
+        ],
+        "C=P": [
+            "SureChEMBL",
+            "phosphorane",
+            0
+        ],
+        "[S,P][F,Cl,Br,I]": [
+            "SureChEMBL",
+            "Phosphorus_Halide",
+            0
+        ],
+        "C=!@CC=!@C": [
+            "SureChEMBL",
+            "Polyene",
+            0
+        ],
+        "C=CC=CC=CC=C": [
+            "SureChEMBL",
+            "polyenes",
+            0
+        ],
+        "cC=CC=CC=Cc": [
+            "SureChEMBL",
+            "polyene_chain_between_aromatics",
+            0
+        ],
+        "CC#CC#CC": [
+            "SureChEMBL",
+            "polyines",
+            0
+        ],
+        "c1cccc(cc(cccc2)c2c3)c13": [
+            "SureChEMBL",
+            "Polynuclear_Aromatic_1",
+            0
+        ],
+        "c1cccc(c(cccc2)c2cc3)c13": [
+            "SureChEMBL",
+            "Polynuclear_Aromatic_2",
+            0
+        ],
+        "*[SX2][SX2][SX2]*": [
+            "SureChEMBL",
+            "Polysulfide",
+            0
+        ],
+        "[#16][F,Cl,Br,I]": [
+            "SureChEMBL",
+            "Sulphur_Halide",
+            0
+        ],
+        "c1c2cccc3c2c4c(cc3)cccc4c1": [
+            "SureChEMBL",
+            "pyrene_fragments",
+            0
+        ],
+        "c1ccc[o+]c1": [
+            "SureChEMBL",
+            "Pyrylium",
+            0
+        ],
+        "[C;!r](=[O,S])[S;!r]": [
+            "SureChEMBL",
+            "reactive_carbonyls",
+            0
+        ],
+        "[C;!r](=[O,S])[CD2;!r][F,Br,Cl]": [
+            "SureChEMBL",
+            "reactive_carbonyls",
+            0
+        ],
+        "[C,c;R]#[C,c;R]": [
+            "SureChEMBL",
+            "Ring_Triple_Bond",
+            0
+        ],
+        "[S;R0]=[N;R0]": [
+            "SureChEMBL",
+            "S=N_(not_ring)",
+            0
+        ],
+        "O=[SX4](=O)OC": [
+            "SureChEMBL",
+            "Sulfonate_Ester",
+            0
+        ],
+        "S(=O)(=O)C#N": [
+            "SureChEMBL",
+            "sulfonyl_cyanide",
+            0
+        ],
+        "COS(=O)O[C,c]": [
+            "SureChEMBL",
+            "Sulphate_Ester",
+            0
+        ],
+        "COS(=O)(=O)[C,c]": [
+            "SureChEMBL",
+            "sulphonates",
+            0
+        ],
+        "[SX2H0]!@[N]": [
+            "SureChEMBL",
+            "Sulphur_Nitrogen_single_bond",
+            0
+        ],
+        "C1NNC=NN1": [
+            "SureChEMBL",
+            "Tetraazinane",
+            0
+        ],
+        "SC#N": [
+            "SureChEMBL",
+            "Thiocyanate",
+            0
+        ],
+        "C[O,S;R0][C;R0](=S)": [
+            "SureChEMBL",
+            "thioesters",
+            0
+        ],
+        "[!a][SX2;H1]": [
+            "SureChEMBL",
+            "thioles_(not_aromatic)",
+            0
+        ],
+        "P(=S)(-[S;H1,H0$(S(P)C)])(-[O;H1,H0$(O(P)C)])(-N(C)C)": [
+            "SureChEMBL",
+            "Thiophosphothionate",
+            0
+        ],
+        "[N;!r][C;!r](=S)[N;!r]": [
+            "SureChEMBL",
+            "thiourea",
+            0
+        ],
+        "*1[O,S]*1": [
+            "SureChEMBL",
+            "Three_Membered_Heterocycle",
+            0
+        ],
+        "[#16v3,#16v5]": [
+            "SureChEMBL",
+            "Tri_Pentavalent_S",
+            0
+        ],
+        "C(=O)N(C(=O))OC(=O)": [
+            "SureChEMBL",
+            "Triacyloxime",
+            0
+        ],
+        "c1cnnn1!@C!@[NH1][#6]": [
+            "SureChEMBL",
+            "Triazole",
+            0
+        ],
+        "OS(=O)(=O)(C(F)(F)(F))": [
+            "SureChEMBL",
+            "triflate",
+            0
+        ],
+        "B(c1ccccc1)(c2ccccc2)c3ccccc3": [
+            "SureChEMBL",
+            "Triphenyl_Boranyl",
+            0
+        ],
+        "P(c1aaaaa1)(c1aaaaa1)(c1aaaaa1)": [
+            "SureChEMBL",
+            "triphenylphosphines",
+            0
+        ],
+        "[Si](c1ccccc1)(c2ccccc2)(c3ccccc3)": [
+            "SureChEMBL",
+            "Triphenyl_Silyl",
+            0
+        ],
+        "[Cl,Br,I]C=[!O!R]": [
+            "SureChEMBL",
+            "Vinyl_Halide",
+            0
+        ],
+        "[#6][CH1]!@=[CH1][S;H1,H0$(S(C)C)](=O)(=O)": [
+            "SureChEMBL",
+            "Vinyl_Sulphone",
+            0
+        ],
+        "[#6]S(=O)(=O)O": [
+            "SureChEMBL",
+            "sulphates",
+            0
+        ],
+        "C1C(=O)C=CC=CC=1": [
+            "SureChEMBL",
+            "tropone",
+            0
+        ],
+        "[#6]C(=!@N[$(OC),$([OH])])[#6]": [
+            "SureChEMBL",
+            "Oxime",
+            0
+        ],
+        "[#6]C(=!@NNa)[#6]": [
+            "SureChEMBL",
+            "hydrazone",
+            0
+        ],
+        "[$(N(~!@[#6])!@O);!$([N+]([O-])=O)]": [
+            "SureChEMBL",
+            "Nitrosone_not_nitro",
+            0
+        ],
+        "C=S": [
+            "SureChEMBL",
+            "Thiocarbonyl_group",
+            0
+        ],
+        "C=[NH]": [
+            "SureChEMBL",
+            "enamine_like",
+            0
+        ],
+        "c1ccccc1[NH2,NH3+]": [
+            "SureChEMBL",
+            "analine",
+            0
+        ],
+        "[#6]C(=O)!@OC(=!@[N,O])[#6]": [
+            "SureChEMBL",
+            "acid_anhydrides_2",
+            0
+        ],
+        "FC(F)(F)C(=O)N": [
+            "SureChEMBL",
+            "trifluroacetate_amide",
+            0
+        ],
+        "[#6]C#[CH]": [
+            "SureChEMBL",
+            "triple_bond",
+            0
+        ],
+        "C=C=C": [
+            "SureChEMBL",
+            "Allene",
+            0
+        ],
+        "[$(Sc1nnn[nH,n-]1),$(Sc1nn[nH,n-]n1)]": [
+            "SureChEMBL",
+            "thiatetrazolidine",
+            0
+        ],
+        "[#6][O;R0][$(C([#6])[#6]),$([CH][#6]),$([CH2])][O;R0][#6]": [
+            "SureChEMBL",
+            "glycol",
+            0
+        ],
+        "[#6]C(=O)!@C!@C(=O)N": [
+            "SureChEMBL",
+            "oxy-amide",
+            0
+        ],
+        "O=[CH][O,N][#6]": [
+            "SureChEMBL",
+            "formate_formide",
+            0
+        ],
+        "O=C1C=COC=C1": [
+            "SureChEMBL",
+            "pyranone",
+            0
+        ],
+        "c1cc2C=CC(=O)Oc2cc1": [
+            "SureChEMBL",
+            "Coumarin",
+            0
+        ],
+        "s1ccnc1[N!H0]": [
+            "SureChEMBL",
+            "aminothiazole",
+            0
+        ],
+        "O=C1CSCN1": [
+            "SureChEMBL",
+            "Thiazolidinone",
+            0
+        ],
+        "N1C(=O)CSCC1=O": [
+            "SureChEMBL",
+            "Thiomorpholinedione",
+            0
+        ],
+        "O1C=CC=CC=C1": [
+            "SureChEMBL",
+            "oxepine",
+            0
+        ],
+        "c1ccccc1!@[CH]=!@[C!H0]": [
+            "SureChEMBL",
+            "phenylethene",
+            0
+        ],
+        "C=[CH2]": [
+            "SureChEMBL",
+            "Ethene",
+            0
+        ],
+        "C1CC=C1": [
+            "SureChEMBL",
+            "cyclobutene",
+            0
+        ],
+        "*!@c1c(!@*)c(!@*)c(!@*)c(!@*)c1": [
+            "SureChEMBL",
+            "poly_sub_atomatic",
+            0
+        ],
+        "[2#1,3#1,11C,11c,14C,14c,125I,32P,33P,35S]": [
+            "SureChEMBL",
+            "Isotopes",
+            0
+        ],
+        "[Ac,Ag,Am,Ar,As,At,Au,Ba,Be,Bi,Bk,Cd,Ce,Cf,Cm,Cr,Cs,Dy,Er,Eu,Fr,Ga,Gd,Ge,He,Hf,Ho,In,Ir,Kr,La,Lu,Mo,Nb,Nd,Ne,Ni,Np,Os,Pa,Pb,Pd,Pm,Po,Pr,Pt,Pu,Ra,Rb,Re,Rh,Rn,Ru,Sb,Sc,Se,Sm,Sr,Ta,Tb,Tc,Te,Th,Ti,Tl,Tm,U,V,W,Xe,Y,Yb,Zr]": [
+            "SureChEMBL",
+            "Undesirable_Elements_Salts",
+            0
+        ],
+        "[#6;$([#6]~[#3,#11,#12,#13,#19,#20,#26,#27,#28,#29,#30])]": [
+            "SureChEMBL",
+            "Metal_Carbon_bond",
+            0
+        ],
+        "[n+][O-X1].[n+][O-X1]": [
+            "SureChEMBL",
+            "Aromatic_N-Oxide_more_than_one",
+            0
+        ],
+        "[N+](=O)[O-].[N+](=O)[O-]": [
+            "SureChEMBL",
+            "Nitro_more_than_one",
+            0
+        ]
+    }
+}
