@@ -1,33 +1,12 @@
-name: install_chembl_structure_pipeline
-on:
-  push:
-    paths:
-      - 'env.yml'
-      - '.github/workflows/test.yml'
+name: CI
+on:  [workflow_dispatch, pull_request, push]
 
 jobs:
-  create-env:
-    name: ${{ matrix.os }} 
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash -l {0}
-        
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, macos-latest]
-        
+  test:
+    runs-on: ubuntu-latest
     steps:
-      - name: checkout repository
-        uses: actions/checkout@v2
+        - uses: actions/checkout@v2
+        - run: echo "Installing chembl_structure pipeline"
+        - run: conda install -c conda-forge chembl_structure_pipeline
+        - uses: fastai/workflows/nbdev-ci@master
         
-      - name: create environment with mamba
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-          mamba-version: "*"
-          channels: conda-forge,bioconda,defaults
-          auto-activate-base: false
-          activate-environment: install_chembl_structure_pipeline
-          environment-file: env.yml
-       - uses: fastai/workflows/nbdev-ci@master
