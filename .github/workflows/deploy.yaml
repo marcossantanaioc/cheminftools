@@ -6,19 +6,4 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash -l {0}
-    container: node:latest
-    # service containers to run with `postgres-job`
-    steps [fastai/workflows/quarto-ghp@master]:
-      - uses: conda-incubator/setup-miniconda@v2
-        with:
-          miniconda-version: "latest"
-          channels: conda-forge, defaults
-          use-only-tar-bz2: true  # IMPORTANT: This needs to be set for caching to work properly!
-          auto-update-conda: true
-          auto-activate-base: true
-      - name: Install chembl_structure_pipeline
-        run:
-            conda install -c conda-forge chembl_structure_pipeline
+    steps: [uses: fastai/workflows/quarto-ghp@master]
