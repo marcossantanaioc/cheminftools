@@ -6,4 +6,13 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    steps: [uses: fastai/workflows/quarto-ghp@master]
+    steps:
+          - uses: actions/checkout@v2
+          - uses: conda-incubator/setup-miniconda@v2
+            with:
+              channels: conda-forge
+              auto-update-conda: true
+          - name: Install chembl_structure_pipeline
+            shell: bash -l {0}
+            run: conda install -c conda-forge chembl_structure_pipeline
+          - uses: fastai/workflows/quarto-ghp@master
