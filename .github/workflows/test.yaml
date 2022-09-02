@@ -5,6 +5,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - run: conda install -c conda-forge chembl_structure_pipeline
+      - run: conda install -c conda-forge chembl_structure_pipeline -p /home/runner/work/chemtools/chemtools
       - uses: fastai/workflows/nbdev-ci@master
 
