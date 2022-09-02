@@ -8,5 +8,8 @@ jobs:
       - uses: actions/checkout@v2
       - uses: conda-incubator/setup-miniconda@v2
         with:
-          - run: conda install -c conda-forge chembl_structure_pipeline
+          channels: conda-forge
+          auto-update-conda: true
+        run: conda install -c conda-forge chembl_structure_pipeline
       - uses: fastai/workflows/nbdev-ci@master
+
