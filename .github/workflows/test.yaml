@@ -9,9 +9,7 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v2
         with:
           channels: conda-forge
-          activate-environment: cspipeline
           auto-update-conda: true
       - name: Install chembl_structure_pipeline
-        shell: bash -l {0}
-        run: python setup.py install
+        run: conda install -c conda-forge chembl_structure_pipeline
       - uses: fastai/workflows/nbdev-ci@master
