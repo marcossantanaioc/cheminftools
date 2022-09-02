@@ -11,7 +11,7 @@ jobs:
         shell: bash -l {0}
     container: node:latest
     # service containers to run with `postgres-job`
-    steps:
+    steps [fastai/workflows/quarto-ghp@master]:
       - uses: conda-incubator/setup-miniconda@v2
         with:
           miniconda-version: "latest"
@@ -22,4 +22,3 @@ jobs:
       - name: Install chembl_structure_pipeline
         run:
             conda install -c conda-forge chembl_structure_pipeline
-    steps: [uses: fastai/workflows/quarto-ghp@master]
