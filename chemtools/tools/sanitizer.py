@@ -14,10 +14,11 @@ from tqdm import tqdm
 from ..utils import convert_smiles
 from rdkit import Chem, rdBase
 from rdkit.Chem import rdchem, rdmolops, SanitizeMol
-from chembl_structure_pipeline import checker, standardizer
 from rdkit.Chem.FilterCatalog import *
 from rdkit.Chem.MolStandardize.rdMolStandardize import LargestFragmentChooser
 from rdkit.Chem.SaltRemover import SaltRemover
+
+from rdkit.Chem.MolStandardize import rdMolStandardize
 
 # %% ../../notebooks/sanitizer.ipynb 6
 rdBase.DisableLog('rdApp.error')
@@ -119,24 +120,26 @@ def normalize_mol(mol):
     patt = Chem.MolFromSmarts('[O-]N(=O)')  # Corrects nitro groups from Dotmatics
     if mol.HasSubstructMatch(patt):
         mol = add_nitrogen_charges(mol)
-        
-
-    mol_block = Chem.MolToMolBlock(mol)
-    std_molblock = standardizer.standardize_molblock(mol_block)
-    issues = checker.check_molblock(std_molblock)
-
-    outmb, flag = standardizer.get_parent_molblock(std_molblock)
-    std_mol = Chem.MolFromMolBlock(outmb)
-
-    if len(issues) > 0 and not flag and std_mol.GetNumHeavyAtoms() >= 6 and Chem.rdMolDescriptors.CalcNumRings(
-            std_mol) >= 1:
-        for issue in issues:
-            if issue[0] >= 6:
-                return None
-            else:
-                return std_mol
-    else:
-        return std_mol
+    
+    # removeHs, disconnect metal atoms, normalize the molecule, reionize the molecule
+    clean_mol = rdMolStandardize.Cleanup(mol) 
+     
+    # if many fragments, get the "parent" (the actual mol we are interested in) 
+    parent_clean_mol = rdMolStandardize.FragmentParent(clean_mol)
+         
+    # try to neutralize molecule
+    uncharger = rdMolStandardize.Uncharger() # annoying, but necessary as no convenience method exists
+    uncharged_parent_clean_mol = uncharger.uncharge(parent_clean_mol)
+     
+    # note that no attempt is made at reionization at this step
+    # nor at ionization at some pH (rdkit has no pKa caculator)
+    # the main aim to to represent all molecules from different sources
+    # in a (single) standard way, for use in ML, catalogue, etc.
+     
+    te = rdMolStandardize.TautomerEnumerator() # idem
+    taut_uncharged_parent_clean_mol = te.Canonicalize(uncharged_parent_clean_mol)
+     
+    return taut_uncharged_parent_clean_mol
 
 
 def get_stereo_info(mol):

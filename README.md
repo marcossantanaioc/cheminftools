@@ -25,7 +25,7 @@ data = pd.read_csv('../data/Lipophilicity.csv')
 # Sanitizing
 
 The
-[`MolCleaner`](https://marcossantanaioc.github.io/chemtools/sanitizer.html#molcleaner)
+[\[`MolCleaner`\](https://marcossantanaioc.github.io/chemtools/sanitizer.html#molcleaner)]('sanitizer.ipynb')
 class performs sanitization tasks following the steps implemented on
 [chembl_structure_pipeline](https://github.com/chembl/ChEMBL_Structure_Pipeline)
 
@@ -68,12 +68,31 @@ class performs sanitization tasks following the steps implemented on
 processed_data = MolCleaner.from_df(data, smiles_col='smiles', act_col='exp', id_col='CMPD_CHEMBLID')
 ```
 
-    100%|██████████| 1000/1000 [00:03<00:00, 265.25it/s]
+      2%|▏         | 90/4200 [00:00<00:25, 158.22it/s][19:31:14] Tautomer enumeration stopped at 304 tautomers: max transforms reached
+      3%|▎         | 140/4200 [00:01<00:43, 93.55it/s][19:31:15] Tautomer enumeration stopped at 714 tautomers: max transforms reached
+      5%|▌         | 213/4200 [00:02<00:40, 98.36it/s][19:31:15] Tautomer enumeration stopped at 318 tautomers: max transforms reached
+    [19:31:15] Tautomer enumeration stopped at 400 tautomers: max transforms reached
+     20%|█▉        | 833/4200 [00:04<00:19, 173.61it/s][19:31:18] Tautomer enumeration stopped at 304 tautomers: max transforms reached
+     25%|██▌       | 1063/4200 [00:05<00:15, 208.82it/s][19:31:19] Tautomer enumeration stopped at 338 tautomers: max transforms reached
+     34%|███▍      | 1426/4200 [00:08<00:32, 84.66it/s] [19:31:21] Tautomer enumeration stopped at 1000 tautomers: max tautomers reached
+     37%|███▋      | 1570/4200 [00:08<00:19, 137.70it/s][19:31:22] Tautomer enumeration stopped at 157 tautomers: max transforms reached
+    [19:31:22] Tautomer enumeration stopped at 429 tautomers: max transforms reached
+     51%|█████     | 2142/4200 [00:10<00:07, 280.52it/s][19:31:24] Tautomer enumeration stopped at 570 tautomers: max transforms reached
+     63%|██████▎   | 2654/4200 [00:12<00:07, 213.35it/s][19:31:26] Tautomer enumeration stopped at 381 tautomers: max transforms reached
+     66%|██████▌   | 2780/4200 [00:13<00:07, 196.66it/s][19:31:26] Tautomer enumeration stopped at 274 tautomers: max transforms reached
+     67%|██████▋   | 2802/4200 [00:13<00:10, 134.26it/s][19:31:28] Tautomer enumeration stopped at 1000 tautomers: max tautomers reached
+     83%|████████▎ | 3478/4200 [00:17<00:04, 179.74it/s][19:31:30] Tautomer enumeration stopped at 196 tautomers: max transforms reached
+     84%|████████▍ | 3532/4200 [00:17<00:03, 190.39it/s][19:31:31] Tautomer enumeration stopped at 157 tautomers: max transforms reached
+    [19:31:32] Tautomer enumeration stopped at 1000 tautomers: max tautomers reached
+    [19:31:32] Tautomer enumeration stopped at 213 tautomers: max transforms reached
+    100%|██████████| 4200/4200 [00:20<00:00, 207.52it/s]
+    /notebooks/chemtools/chemtools/tools/sanitizer.py:334: FutureWarning: Behavior when concatenating bool-dtype and numeric-dtype arrays is deprecated; in a future version these will cast to object dtype (instead of coercing bools to numeric values). To retain the old behavior, explicitly cast bool-dtype arrays to numeric dtype.
+      return pd.concat([no_duplicates, *processed_duplicates],axis=0)
 
 # Filtering
 
 The
-[`MolFiltering`](https://marcossantanaioc.github.io/chemtools/filtering.html#molfiltering)
+[\[`MolFiltering`\](https://marcossantanaioc.github.io/chemtools/filtering.html#molfiltering)]('filtering.ipynb')
 class is responsible for removing compounds that match defined
 substructural alerts, including PAINS and rules defined by different
 organizations, such as GSK and University of Dundee.
@@ -82,35 +101,44 @@ organizations, such as GSK and University of Dundee.
 clean_dataset, alerts_dataset = MolFiltering.from_df(processed_data, smiles_col='processed_smiles')
 ```
 
-    100%|██████████| 1000/1000 [00:19<00:00, 52.32it/s]
+      3%|▎         | 131/4175 [00:02<01:08, 59.34it/s][19:33:08] Tautomer enumeration stopped at 361 tautomers: max transforms reached
+      5%|▍         | 202/4175 [00:04<01:12, 54.98it/s][19:33:10] Tautomer enumeration stopped at 733 tautomers: max transforms reached
+      9%|▊         | 357/4175 [00:08<01:37, 38.96it/s][19:33:14] Tautomer enumeration stopped at 628 tautomers: max transforms reached
+     21%|██        | 856/4175 [00:21<01:43, 31.96it/s][19:33:27] Tautomer enumeration stopped at 304 tautomers: max transforms reached
+     28%|██▊       | 1159/4175 [00:28<00:43, 69.23it/s][19:33:34] Tautomer enumeration stopped at 338 tautomers: max transforms reached
+     33%|███▎      | 1381/4175 [00:33<01:25, 32.53it/s][19:33:40] Tautomer enumeration stopped at 1000 tautomers: max tautomers reached
+     37%|███▋      | 1551/4175 [00:38<00:44, 58.82it/s][19:33:45] Tautomer enumeration stopped at 1000 tautomers: max tautomers reached
+     43%|████▎     | 1797/4175 [00:44<00:35, 66.51it/s][19:33:50] Tautomer enumeration stopped at 429 tautomers: max transforms reached
+     51%|█████     | 2130/4175 [00:51<00:45, 44.53it/s][19:33:57] Tautomer enumeration stopped at 834 tautomers: max transforms reached
+     63%|██████▎   | 2638/4175 [01:03<00:27, 56.66it/s][19:34:09] Tautomer enumeration stopped at 384 tautomers: max transforms reached
+     66%|██████▌   | 2764/4175 [01:06<00:25, 54.33it/s][19:34:12] Tautomer enumeration stopped at 274 tautomers: max transforms reached
+     69%|██████▊   | 2860/4175 [01:09<00:27, 47.28it/s][19:34:15] Tautomer enumeration stopped at 953 tautomers: max transforms reached
+     84%|████████▎ | 3490/4175 [01:23<00:10, 66.00it/s][19:34:29] Tautomer enumeration stopped at 190 tautomers: max transforms reached
+     85%|████████▌ | 3553/4175 [01:25<00:11, 54.64it/s][19:34:32] Tautomer enumeration stopped at 1000 tautomers: max tautomers reached
+     94%|█████████▎| 3906/4175 [01:34<00:04, 57.99it/s][19:34:40] Tautomer enumeration stopped at 213 tautomers: max transforms reached
+    100%|█████████▉| 4166/4175 [01:39<00:00, 61.64it/s][19:34:45] Tautomer enumeration stopped at 160 tautomers: max transforms reached
+    100%|██████████| 4175/4175 [01:40<00:00, 41.74it/s]
 
-    Total number of flagged molecules = 17
-    Most common flag = I13 Cyanamides
+    Total number of flagged molecules = 85
+    Most common flag = R18 Quaternary C, Cl, I, P or S
 
 ``` python
 alerts_dataset.set_index('processed_smiles')['Alert_rule_set']
 ```
 
     processed_smiles
-    Nc1nc(OC2CCCC2)nc2c1ncn2[C@@H]1O[C@H](CO)[C@H](Cl)[C@H]1O                         Glaxo
-    CS(=O)(=O)c1ccc(N2CCN(C(=O)[C@@H]3CCCC[C@H]3C(=O)NCC#N)CC2)cc1                    Glaxo
-    Cn1cc(-c2cccc(C[C@H](NC(=O)c3cc(C(C)(C)C)nn3C)C(=O)NCC#N)c2)cn1                   Glaxo
-    CC(C)c1ccccc1Cc1cc(C(=O)Nc2ccc(S(=O)(=O)c3ccccc3C(C)(C)C)cc2)c(O)c(O)c1O          Glaxo
-    Cc1cccc(C[C@H](NC(=O)c2cc(C(C)(C)C)nn2C)C(=O)NCC#N)c1                             Glaxo
-    C[C@H]1O[C@@H](n2cnc3c(N)nc(OCC4CC45CC5)nc32)[C@H](O)[C@H]1Cl                     Glaxo
-    CC(=O)c1ncccc1NC(=O)[C@H]1CC[C@H](N2C(=O)[C@H]3[C@H]4CC[C@H](C4)[C@H]3C2=O)CC1    Glaxo
-    C[S+]([O-])CCN1C(=O)C(NC(=O)c2cc3cc(Cl)sc3[nH]2)Cc2ccccc21                        Glaxo
-    C=CCCCCCCCCC(=O)N[C@H]1CCC(=O)NC1=O                                               Glaxo
-    C=CCCCCCCCCC(=O)N[C@H]1CCC(=O)NC1=O                                               Glaxo
-    O=c1c(O)cccc2cc(O)c(O)c(O)c12                                                     Glaxo
-    CCCN1CCN(c2ccc(C(=O)NC3(C(=O)NCC#N)CCCCC3)cc2)CC1                                 Glaxo
-    CN(C)CC(O)COc1ccc(Nc2cc(N(CC#N)c3cc(Cl)ccc3Cl)ncn2)cc1                            Glaxo
-    N#CCNC(=O)[C@@H]1CCCC[C@H]1C(=O)N1CCc2[nH]c3ccc(F)cc3c2C1                         Glaxo
-    O=C1C=CC(=O)c2c(O)ccc(O)c21                                                       Glaxo
-    CN1C2CC(OC(=O)C(CO)c3ccccc3)CC1C1OC12                                             Glaxo
-    N#CCNC(=O)[C@@H]1CCCC[C@H]1C(=O)N1CCN(c2ccc(C#N)cc2)CC1                           Glaxo
-    N#CCNC(=O)[C@@H]1CCCC[C@H]1C(=O)N1CCCCC1                                          Glaxo
-    Name: Alert_rule_set, dtype: object
+    Cc1cccc(CC(NC(=O)c2cc(C(C)(C)C)nn2C)C(=O)NCC#N)c1                   Glaxo
+    COc1ccc(N2CCN(C(=O)C3CCCCC3C(=O)NCC#N)CC2)cc1                       Glaxo
+    c1ccc(-c2cc(NCCCCCCCCNc3cc(-c4ccccc4)nc4ccccc34)c3ccccc3n2)cc1      Glaxo
+    [O-][S+](c1ccccc1)c1ccc2nnnn2n1                                     Glaxo
+    CC1=N[SH](=O)(c2cccc(-c3ccc(C)cc3)c2)NC1=O                          Glaxo
+                                                                        ...  
+    CC[C@H](NC(=O)c1c([S+](C)[O-])c(-c2ccccc2)nc2c(F)cccc12)c1ccccc1    Glaxo
+    CCCN1CCN(c2ccc(C(=O)NC3(C(=O)NCC#N)CCCCC3)cc2)CC1                   Glaxo
+    N#CCNC(=O)C1CCCCC1C(=O)N1CCN(c2ccccc2)CC1                           Glaxo
+    NNC(=O)c1ccncc1                                                     Glaxo
+    CC[C@H](NC(=O)c1c([S+](C)[O-])c(-c2ccccc2)nc2ccccc12)c1ccccc1       Glaxo
+    Name: Alert_rule_set, Length: 87, dtype: object
 
 #### Quinone
 
@@ -145,7 +173,7 @@ mol
 # Featurization
 
 The
-[`MolFeaturizer`](https://marcossantanaioc.github.io/chemtools/featurizer.html#molfeaturizer)
+[\[`MolFeaturizer`\](https://marcossantanaioc.github.io/chemtools/featurizer.html#molfeaturizer)]('featurizer.ipynb')
 class converts SMILES into molecular descriptors. The current version
 supports Morgan fingerprints, Atom Pairs, Torsion Fingerprints, RDKit
 fingerprints and 200 constitutional descriptors, and MACCS keys.
@@ -158,6 +186,14 @@ fingerprinter = MolFeaturizer('morgan')
 X = fingerprinter.process_smiles_list(clean_dataset['processed_smiles'].values)
 ```
 
+    Calculating fingerprints: 100%|██████████| 4090/4090 [00:01<00:00, 2752.95it/s]
+
 ``` python
 X[0:5]
 ```
+
+    array([[0, 0, 0, ..., 0, 0, 0],
+           [0, 0, 0, ..., 1, 0, 0],
+           [0, 1, 0, ..., 0, 0, 0],
+           [0, 0, 0, ..., 0, 0, 0],
+           [0, 0, 1, ..., 0, 0, 0]], dtype=uint8)
