@@ -35,7 +35,7 @@ data = pd.read_csv('../data/example_data.csv')
 # Sanitizing
 
 The
-[`MolCleaner`](https://marcossantanaioc.github.io/chemtools/tools.sanitizer.html#molcleaner)
+[`MolCleaner`](https://marcossantanaioc.github.io/chemtools/sanitizer.html#molcleaner)
 class performs sanitization tasks following the steps implemented on
 [chembl_structure_pipeline](https://github.com/chembl/ChEMBL_Structure_Pipeline)
 
@@ -78,140 +78,12 @@ class performs sanitization tasks following the steps implemented on
 processed_data = MolCleaner.from_df(data, smiles_col='smiles', act_col='pIC50', id_col='molecule_chembl_id')
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Unnamed: 0</th>
-      <th>processed_smiles</th>
-      <th>molecule_chembl_id</th>
-      <th>IC50</th>
-      <th>units</th>
-      <th>smiles</th>
-      <th>pIC50</th>
-      <th>molecular_weight</th>
-      <th>n_hba</th>
-      <th>n_hbd</th>
-      <th>logp</th>
-      <th>ro5_fulfilled</th>
-      <th>inchi</th>
-      <th>Stereo</th>
-      <th>duplicate</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>5347</td>
-      <td>N#Cc1cnc(Nc2cccc(Br)c2)c2cc(NC(=O)c3ccco3)ccc12</td>
-      <td>CHEMBL1641996</td>
-      <td>55600.0</td>
-      <td>nM</td>
-      <td>N#Cc1cnc(Nc2cccc(Br)c2)c2cc(NC(=O)c3ccco3)ccc12</td>
-      <td>4.254925</td>
-      <td>432.022188</td>
-      <td>5</td>
-      <td>2</td>
-      <td>5.45788</td>
-      <td>True</td>
-      <td>GRAWSTNUDRSLLQ-UHFFFAOYSA-N</td>
-      <td></td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2985</td>
-      <td>COc1cccc(-c2cn(-c3ccc(CNCCO)cc3)c3ncnc(N)c23)c1</td>
-      <td>CHEMBL424375</td>
-      <td>300.0</td>
-      <td>nM</td>
-      <td>COc1cccc(-c2cn(-c3ccc(CNCCO)cc3)c3ncnc(N)c23)c1</td>
-      <td>6.522879</td>
-      <td>389.185175</td>
-      <td>7</td>
-      <td>3</td>
-      <td>2.76020</td>
-      <td>True</td>
-      <td>QGPSFIYTQAONCS-UHFFFAOYSA-N</td>
-      <td></td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2828</td>
-      <td>Cc1ncc([N+](=O)[O-])n1CC(=NNC(=O)c1ccc(O)cc1)c...</td>
-      <td>CHEMBL3088220</td>
-      <td>210.0</td>
-      <td>nM</td>
-      <td>Cc1ncc([N+](=O)[O-])n1C/C(=N/NC(=O)c1ccc(O)cc1...</td>
-      <td>6.677781</td>
-      <td>457.038566</td>
-      <td>7</td>
-      <td>2</td>
-      <td>3.40212</td>
-      <td>True</td>
-      <td>XBPATCWTKVXDPF-UHFFFAOYSA-N</td>
-      <td></td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>3898</td>
-      <td>C1CCC(C(CC2CCCCN2)C2CCCCC2)CC1</td>
-      <td>CHEMBL75880</td>
-      <td>1485.2</td>
-      <td>nM</td>
-      <td>C1CCC(C(CC2CCCCN2)C2CCCCC2)CC1</td>
-      <td>5.828215</td>
-      <td>277.276950</td>
-      <td>1</td>
-      <td>1</td>
-      <td>5.29540</td>
-      <td>True</td>
-      <td>CYXKNKQEMFBLER-UHFFFAOYSA-N</td>
-      <td>6_?</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>2896</td>
-      <td>Cc1cc2cc(Nc3ccnc4cc(-c5ccc(CNCCN6CCNCC6)cc5)sc...</td>
-      <td>CHEMBL79060</td>
-      <td>250.0</td>
-      <td>nM</td>
-      <td>Cc1cc2cc(Nc3ccnc4cc(-c5ccc(CNCCN6CCNCC6)cc5)sc...</td>
-      <td>6.602060</td>
-      <td>496.240916</td>
-      <td>6</td>
-      <td>4</td>
-      <td>5.49142</td>
-      <td>True</td>
-      <td>MEAHQSFATRAJHG-UHFFFAOYSA-N</td>
-      <td></td>
-      <td>False</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+    '|    |   Unnamed: 0 | processed_smiles                                           | molecule_chembl_id   |    IC50 | units   | smiles                                                      |   pIC50 |   molecular_weight |   n_hba |   n_hbd |    logp | ro5_fulfilled   | inchi                       | Stereo   | duplicate   |\n|---:|-------------:|:-----------------------------------------------------------|:---------------------|--------:|:--------|:------------------------------------------------------------|--------:|-------------------:|--------:|--------:|--------:|:----------------|:----------------------------|:---------|:------------|\n|  0 |         5347 | N#Cc1cnc(Nc2cccc(Br)c2)c2cc(NC(=O)c3ccco3)ccc12            | CHEMBL1641996        | 55600   | nM      | N#Cc1cnc(Nc2cccc(Br)c2)c2cc(NC(=O)c3ccco3)ccc12             | 4.25493 |            432.022 |       5 |       2 | 5.45788 | True            | GRAWSTNUDRSLLQ-UHFFFAOYSA-N |          | False       |\n|  1 |         2985 | COc1cccc(-c2cn(-c3ccc(CNCCO)cc3)c3ncnc(N)c23)c1            | CHEMBL424375         |   300   | nM      | COc1cccc(-c2cn(-c3ccc(CNCCO)cc3)c3ncnc(N)c23)c1             | 6.52288 |            389.185 |       7 |       3 | 2.7602  | True            | QGPSFIYTQAONCS-UHFFFAOYSA-N |          | False       |\n|  2 |         2828 | Cc1ncc([N+](=O)[O-])n1CC(=NNC(=O)c1ccc(O)cc1)c1ccc(Br)cc1  | CHEMBL3088220        |   210   | nM      | Cc1ncc([N+](=O)[O-])n1C/C(=N/NC(=O)c1ccc(O)cc1)c1ccc(Br)cc1 | 6.67778 |            457.039 |       7 |       2 | 3.40212 | True            | XBPATCWTKVXDPF-UHFFFAOYSA-N |          | False       |\n|  3 |         3898 | C1CCC(C(CC2CCCCN2)C2CCCCC2)CC1                             | CHEMBL75880          |  1485.2 | nM      | C1CCC(C(CC2CCCCN2)C2CCCCC2)CC1                              | 5.82822 |            277.277 |       1 |       1 | 5.2954  | True            | CYXKNKQEMFBLER-UHFFFAOYSA-N | 6_?      | False       |\n|  4 |         2896 | Cc1cc2cc(Nc3ccnc4cc(-c5ccc(CNCCN6CCNCC6)cc5)sc34)ccc2[nH]1 | CHEMBL79060          |   250   | nM      | Cc1cc2cc(Nc3ccnc4cc(-c5ccc(CNCCN6CCNCC6)cc5)sc34)ccc2[nH]1  | 6.60206 |            496.241 |       6 |       4 | 5.49142 | True            | MEAHQSFATRAJHG-UHFFFAOYSA-N |          | False       |'
 
 # Filtering
 
 The
-[`MolFiltering`](https://marcossantanaioc.github.io/chemtools/tools.filtering.html#molfiltering)
+[`MolFiltering`](https://marcossantanaioc.github.io/chemtools/filtering.html#molfiltering)
 class is responsible for removing compounds that match defined
 substructural alerts, including PAINS and rules defined by different
 organizations, such as GSK and University of Dundee.
@@ -227,118 +99,10 @@ alerts_data = MolFiltering.from_df(processed_data, smiles_col='processed_smiles'
 ```
 
 ``` python
-alerts_data.head(10)
+alerts_data.head(10).to_markdown()
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>_smiles</th>
-      <th>Alert_SMARTS</th>
-      <th>Alert_description</th>
-      <th>Alert_rule_set</th>
-      <th>Alert_num_hits</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Cc1ncc([N+](=O)[O-])n1CC(=NNC(=O)c1ccc(O)cc1)c...</td>
-      <td>[N;R0][N;R0]C(=O)</td>
-      <td>R17 acylhydrazide</td>
-      <td>Glaxo</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>O=NN(CCCl)C(=O)Nc1ccc2ncnc(Nc3cccc(Cl)c3)c2c1</td>
-      <td>[Br,Cl,I][CX4;CH,CH2]</td>
-      <td>R1 Reactive alkyl halides</td>
-      <td>Glaxo</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>O=NN(CCCl)C(=O)Nc1ccc2ncnc(Nc3cccc(Cl)c3)c2c1</td>
-      <td>[N;R0][N;R0]C(=O)</td>
-      <td>R17 acylhydrazide</td>
-      <td>Glaxo</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>O=NN(CCCl)C(=O)Nc1ccc2ncnc(Nc3cccc(Cl)c3)c2c1</td>
-      <td>[N&amp;D2](=O)</td>
-      <td>R21 Nitroso</td>
-      <td>Glaxo</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>CS(=O)(=O)O[C@H]1CN[C@H](C#Cc2cc3ncnc(Nc4ccc(O...</td>
-      <td>COS(=O)(=O)[C,c]</td>
-      <td>R5 Sulphonates</td>
-      <td>Glaxo</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>Cc1cccc(Nc2ncnc3ccc(N(C)C(=O)N(CCCl)N=O)cc23)c1</td>
-      <td>[Br,Cl,I][CX4;CH,CH2]</td>
-      <td>R1 Reactive alkyl halides</td>
-      <td>Glaxo</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Cc1cccc(Nc2ncnc3ccc(N(C)C(=O)N(CCCl)N=O)cc23)c1</td>
-      <td>[N;R0][N;R0]C(=O)</td>
-      <td>R17 acylhydrazide</td>
-      <td>Glaxo</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Cc1cccc(Nc2ncnc3ccc(N(C)C(=O)N(CCCl)N=O)cc23)c1</td>
-      <td>[N&amp;D2](=O)</td>
-      <td>R21 Nitroso</td>
-      <td>Glaxo</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>C=COC(=O)N(CCN(C)C)N=Nc1ccc2ncnc(Nc3cccc(Cl)c3...</td>
-      <td>[N;R0][N;R0]C(=O)</td>
-      <td>R17 acylhydrazide</td>
-      <td>Glaxo</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>O=C(CCl)Nc1ccc2ncnc(Nc3cccc(I)c3)c2c1</td>
-      <td>[Br,Cl,I][CX4;CH,CH2]</td>
-      <td>R1 Reactive alkyl halides</td>
-      <td>Glaxo</td>
-      <td>1</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+    '|    | _smiles                                                                    | Alert_SMARTS          | Alert_description         | Alert_rule_set   |   Alert_num_hits |\n|---:|:---------------------------------------------------------------------------|:----------------------|:--------------------------|:-----------------|-----------------:|\n|  0 | Cc1ncc([N+](=O)[O-])n1CC(=NNC(=O)c1ccc(O)cc1)c1ccc(Br)cc1                  | [N;R0][N;R0]C(=O)     | R17 acylhydrazide         | Glaxo            |                1 |\n|  0 | O=NN(CCCl)C(=O)Nc1ccc2ncnc(Nc3cccc(Cl)c3)c2c1                              | [Br,Cl,I][CX4;CH,CH2] | R1 Reactive alkyl halides | Glaxo            |                1 |\n|  1 | O=NN(CCCl)C(=O)Nc1ccc2ncnc(Nc3cccc(Cl)c3)c2c1                              | [N;R0][N;R0]C(=O)     | R17 acylhydrazide         | Glaxo            |                1 |\n|  2 | O=NN(CCCl)C(=O)Nc1ccc2ncnc(Nc3cccc(Cl)c3)c2c1                              | [N&D2](=O)            | R21 Nitroso               | Glaxo            |                1 |\n|  0 | CS(=O)(=O)O[C@H]1CN[C@H](C#Cc2cc3ncnc(Nc4ccc(OCc5cccc(F)c5)c(Cl)c4)c3s2)C1 | COS(=O)(=O)[C,c]      | R5 Sulphonates            | Glaxo            |                1 |\n|  0 | Cc1cccc(Nc2ncnc3ccc(N(C)C(=O)N(CCCl)N=O)cc23)c1                            | [Br,Cl,I][CX4;CH,CH2] | R1 Reactive alkyl halides | Glaxo            |                1 |\n|  1 | Cc1cccc(Nc2ncnc3ccc(N(C)C(=O)N(CCCl)N=O)cc23)c1                            | [N;R0][N;R0]C(=O)     | R17 acylhydrazide         | Glaxo            |                1 |\n|  2 | Cc1cccc(Nc2ncnc3ccc(N(C)C(=O)N(CCCl)N=O)cc23)c1                            | [N&D2](=O)            | R21 Nitroso               | Glaxo            |                1 |\n|  0 | C=COC(=O)N(CCN(C)C)N=Nc1ccc2ncnc(Nc3cccc(Cl)c3)c2c1                        | [N;R0][N;R0]C(=O)     | R17 acylhydrazide         | Glaxo            |                1 |\n|  0 | O=C(CCl)Nc1ccc2ncnc(Nc3cccc(I)c3)c2c1                                      | [Br,Cl,I][CX4;CH,CH2] | R1 Reactive alkyl halides | Glaxo            |                1 |'
 
 #### Quinone
 
@@ -348,7 +112,7 @@ mol.GetSubstructMatches(Chem.MolFromSmarts('O=C1[#6]~[#6]C(=O)[#6]~[#6]1'))
 mol
 ```
 
-![](index_files/figure-gfm/cell-10-output-1.png)
+![](index_files/figure-gfm/cell-11-output-1.png)
 
 #### Cynamide
 
@@ -358,7 +122,7 @@ mol1.GetSubstructMatches(Chem.MolFromSmarts('N[CH2]C#N'))
 mol1
 ```
 
-![](index_files/figure-gfm/cell-11-output-1.png)
+![](index_files/figure-gfm/cell-12-output-1.png)
 
 #### R18 Quaternary C, Cl, I, P or S
 
@@ -368,12 +132,12 @@ mol.GetSubstructMatches(Chem.MolFromSmarts('[C+,Cl+,I+,P+,S+]'))
 mol
 ```
 
-![](index_files/figure-gfm/cell-12-output-1.png)
+![](index_files/figure-gfm/cell-13-output-1.png)
 
 # Featurization
 
 The
-[`MolFeaturizer`](https://marcossantanaioc.github.io/chemtools/tools.featurizer.html#molfeaturizer)
+[`MolFeaturizer`](https://marcossantanaioc.github.io/chemtools/featurizer.html#molfeaturizer)
 class converts SMILES into molecular descriptors. The current version
 supports Morgan fingerprints, Atom Pairs, Torsion Fingerprints, RDKit
 fingerprints and 200 constitutional descriptors, and MACCS keys.
