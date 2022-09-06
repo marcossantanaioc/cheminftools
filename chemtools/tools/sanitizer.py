@@ -623,7 +623,7 @@ class MolCleaner:
         """Sanitize a dataset and returns ids, original SMILES and processed SMILES"""
         with mp.Pool() as mp_pool:
 
-            sanitized_smiles = list(progress_bar(mp_pool.imap(cls.process_mol, cls.raw_smiles), total=len(cls.raw_smiles), comment='Processing SMILES.'))
+            sanitized_smiles = list(progress_bar(mp_pool.imap(cls.process_mol, cls.raw_smiles), total=len(cls.raw_smiles)))
                 
  
             cls.data.insert(loc=1, column='processed_smiles', value=list(sanitized_smiles))

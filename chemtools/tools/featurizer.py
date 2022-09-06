@@ -157,7 +157,7 @@ class MolFeaturizer:
         
         """
         func = partial(self.process_smiles, **kwargs)
-        fps = list(progress_bar(map(func, smiles_list), total=len(smiles_list), comment=f'Calculating {self.descriptor_type} descriptors'))
+        fps = list(progress_bar(map(func, smiles_list), total=len(smiles_list)))
         #fps = list(map(func, tqdm(smiles_list, desc='Calculating fingerprints', position=0, leave=True)))
         #fps = list(progress_bar(mp_pool.imap(cls.process_mol, cls.raw_smiles), total=len(cls.raw_smiles), comment='Processing SMILES.'))
         

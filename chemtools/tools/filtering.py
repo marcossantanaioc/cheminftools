@@ -13,7 +13,7 @@ from rdkit import Chem
 from .sanitizer import convert_smiles, normalize_mol, MolCleaner
 from rdkit.Chem import AllChem,rdMolDescriptors
 from rdkit.Chem.FilterCatalog import FilterCatalog, FilterCatalogParams
-from typing import List, Collection
+from typing import List, Collection, Tuple
 
 from fastprogress.fastprogress import master_bar, progress_bar
 from time import sleep
@@ -23,134 +23,120 @@ class MolFiltering:
     
     """Filter a molecular dataset from unwanted structures
     
-        Use static methods `MolFiltering.from_df or MolFiltering.from_csv` instead of accessing the \
-        class directly.
-
-        
-    Attributes:
-            
-        smiles : array-like
-            An array of SMILES.
-
-        data : sanitized_data
-            Sanitized dataset
-
-        smiles_col : str
-            A string representing the column of `data` with SMILES.
-    
+        Use  factory methods `MolFiltering.from_list`, `MolFiltering.from_df` or `MolFiltering.from_csv` instead of accessing the class directly.
        
     """
     
-    def __init__(self, data=None, smiles_col=None, smiles=None, alerts_dict=None):
+#     def __init__(self, data=None, smiles_col=None, smiles=None):
 
 
-        self._raw_smiles = smiles
-        self._data = None
-        self._smiles_col = None
-        self._alerts_dict = None
-        self._structural_alerts = None
-        self._rules = None
+#         self.raw_smiles = None
+#         self.smiles_col = None
+#         self.id_col = None
+#         self.data = None
+#         self.alerts_dict = None
+#         self.rules = None
+#         self.structural_alerts = None
         
     
+#     @property
+#     def alerts_dict(self):
+#         return self._alerts_dict
 
-                
-    def __len__(self):
-        return len(self._smiles)
-
-    def __str__(self):
-        return f'Raw dataset has {len(self.raw_smiles)} records\nThe first record is: {self.raw_smiles[0]}'
-
-    def __getitem__(self, i):
-        return self.raw_smiles[i]
-
-    @property
-    def data(self):
-        return self._data
-
-    @data.setter
-    def data(self, i):
-        self._data = i
-
-    @property
-    def structural_alerts(self):
-        return self._structural_alerts
-
-    @structural_alerts.setter
-    def structural_alerts(self, i):
-        self._structural_alerts = i
+#     @alerts_dict.setter
+#     def alerts_dict(self, i):
+#         self._alerts_dict = i
         
-    @property
-    def rules(self):
-        return self._rules
+#     @property
+#     def structural_alerts(self):
+#         return self._structural_alerts
 
-    @rules.setter
-    def rules(self, i):
-        self._rules = i
+#     @structural_alerts.setter
+#     def structural_alerts(self, i):
+#         self._structural_alerts = i
         
-    @property
-    def alerts_dict(self):
-        return self._alerts_dict
+#     @property
+#     def rules(self):
+#         return self._rules
 
-    @alerts_dict.setter
-    def alerts_dict(self, i):
-        self._alerts_dict = i
+#     @rules.setter
+#     def rules(self, i):
+#         self._rules = i        
+        
+#     @property
+#     def data(self):
+#         return self._data
 
-    @property
-    def raw_smiles(self):
-        return self._raw_smiles
+#     @data.setter
+#     def data(self, i):
+#         self._data = i
 
-    @raw_smiles.setter
-    def raw_smiles(self, i):
-        self._raw_smiles = i
+#     @property
+#     def raw_smiles(self):
+#         return self._raw_smiles
 
-    @property
-    def smiles_col(self):
-        return self._smiles_col
+#     @raw_smiles.setter
+#     def raw_smiles(self, i):
+#         self._raw_smiles = i
 
-    @smiles_col.setter
-    def smiles_col(self, i):
-        self._smiles_col = i
+#     @property
+#     def smiles_col(self):
+#         return self._smiles_col
+
+#     @smiles_col.setter
+#     def smiles_col(self, i):
+#         self._smiles_col = i
+        
+#     @property
+#     def id_col(self):
+#         return self._id_col
+
+#     @id_col.setter
+#     def id_col(self, i):
+#         self._id_col = i
+        
+
         
     @classmethod
-    def get_mol_alerts(cls, smi, alerts_dict:dict=None):
+    def get_mol_alerts(cls, smi, alerts_dict:dict) -> pd.DataFrame:
 
         """
-        Find structural alerts for a single molecule
+        Find structural alerts for a single SMILES.
 
-        Parameters:
+        Arguments:
+        
             smi : str
-                A SMILES representing a molecule
+                A SMILES representing a molecule.
 
             alerts_dict : dict
-                A dict with alerts definitions
+                A dict with alerts definitions.
 
         Returns:
+        
             rule_sets : pandas.DataFrame
                 A `pandas.DataFrame` with substructure alerts for `smi`.
 
         """
-
-
-        if alerts_dict is None:
-            alerts_dict = cls.alerts_dict
-            
+        _columns = ['_smiles','Alert_SMARTS','Alert_description','Alert_rule_set','Alert_num_hits']
         try:
             mol = normalize_mol(smi)
             rule_sets = []
             for alert, (rule_set, description, max_value) in alerts_dict.items():
-                if len(mol.GetSubstructMatches(Chem.MolFromSmarts(alert))) > max_value:
-                    rule_sets.append((smi, alert, description, rule_set))
-            rule_sets = pd.DataFrame(rule_sets,columns=[cls.smiles_col,'Alert_SMARTS','Alert_description','Alert_rule_set'])
+                hits = len(mol.GetSubstructMatches(Chem.MolFromSmarts(alert)))
+                if hits > max_value:
+                    rule_sets.append((smi, alert, description, rule_set, hits))
+            rule_sets = pd.DataFrame(rule_sets, columns=_columns)
             return rule_sets
         except:
             return None
 
     @classmethod
-    def filter_smiles_list(cls, smiles_list, alerts_dict:dict=None, n_jobs:int=None):
+    def get_alerts(cls, smiles_list, alerts_dict:dict, n_jobs:int=None) -> pd.DataFrame:
+        
         """
-        Find structural alerts for a single molecule
+        Find structural alerts for a list of SMILES.
 
-        Parameters:
+        Arguments:
         
             smiles_list : Collection
                 A collection of SMILES.
@@ -163,36 +149,36 @@ class MolFiltering:
 
         Returns:
         
-            all_alerts : pandas.DataFrame
-                A `pandas.DataFrame` with substructure alerts for `smiles_list`.
+            alerts_df : `pandas.DataFrame`
+            
+
+                A `pandas.DataFrames` with flagged molecules.
 
         """
-        if alerts_dict is None:
-            alerts_dict = cls.alerts_dict
+
             
         from functools import partial
+        
         filtering_func = partial(cls.get_mol_alerts, alerts_dict=alerts_dict)
 
-        if n_jobs is None:
-            n_jobs = mp.cpu_count()
+
+        if n_jobs is None: n_jobs = mp.cpu_count()
             
-        try:
-            with mp.Pool(n_jobs) as mp_pool:
-                all_alerts = pd.concat(list(progress_bar(mp_pool.imap(filtering_func, smiles_list),total=len(smiles_list), comment='Processing SMILES.')))
-                common_alert = all_alerts['Alert_description'].mode().item()
-                num_flagged = len(all_alerts[cls.smiles_col].unique())
-                print(f'Total number of flagged molecules = {num_flagged}\nMost common flag = {common_alert}')
-            return all_alerts
+        #try:
+        with mp.Pool(n_jobs) as mp_pool:
+            all_alerts = pd.concat(list(progress_bar(mp_pool.imap(filtering_func, smiles_list), total=len(smiles_list))))
+            
+        if all_alerts.empty: 
+            print('No compounds were flagged.')
         
-        except ValueError:
-            print('No molecules were flagged using the given alerts dictionary\nReturning the original data.')
-            return None
+        return all_alerts
+
             
 
     @classmethod
-    def from_list(cls, smiles_list,alerts_dict:dict=None,n_jobs:int=1):
+    def from_list(cls, smiles_list,alerts_dict:dict=None,n_jobs:int=1, **kwargs) -> pd.DataFrame:
         
-        """Factory method to process a collection of SMILES
+        """Factory method to process a list of SMILES.
 
         Arguments:
 
@@ -200,28 +186,29 @@ class MolFiltering:
                 SMILES ready for sanitization
 
         Returns:
-            alerts_df, clean_dataset : `pandas.DataFrame`, `pandas.DataFrame`
+        
+            alerts_df : `pandas.DataFrame`
             
 
-                A tuple of `pandas.DataFrames` with flagged and clean molecules.
+                A `pandas.DataFrames` with flagged molecules.
 
         """
+        
         id_col = 'ID'
-        smiles_col = 'SMILES'
+        smiles_col = 'smiles'
 
-        df = pd.DataFrame({smiles_col:smiles_list, 
-                           id_col:[f'mol{idx}' for idx in range(len(smiles_list))]})
+        df = pd.DataFrame({smiles_col:smiles_list, id_col:[f'mol{idx}' for idx in range(len(smiles_list))]})
 
 
-        return cls.from_df(df, 
-                           smiles_col=smiles_col,alerts_dict=alerts_dict,n_jobs=n_jobs)
+        return cls.from_df(df, smiles_col=smiles_col, alerts_dict=alerts_dict, n_jobs=n_jobs)
 
 
     @classmethod
     def from_df(cls,
                 df: pd.DataFrame, 
                 smiles_col:str,
-               alerts_dict:dict=None,n_jobs:int=1):
+               alerts_dict:dict=None,
+                n_jobs:int=1) -> pd.DataFrame:
         
         """Factory method to process a `pandas.DataFrame`
 
@@ -235,40 +222,37 @@ class MolFiltering:
 
 
         Returns:
-            alerts_df, clean_dataset : `pandas.DataFrame`, `pandas.DataFrame`
+        
+            alerts_df : `pandas.DataFrame`
             
 
-                A tuple of `pandas.DataFrames` with flagged and clean molecules.
+                A `pandas.DataFrames` with flagged molecules.
 
         """     
         
 
         
-        cls.data = df.copy()
-        cls.data.reset_index(drop=True,inplace=True)
-        cls.smiles_col = smiles_col
-        cls.raw_smiles = cls.data[smiles_col].values
+        _data = df.copy()
+        _data.reset_index(drop=True,inplace=True)
         
         if not isinstance(alerts_dict, dict) and alerts_dict is not None:
             raise TypeError('Please provide a valid dictionary of structural alerts')
         
         if alerts_dict is None:
             with open('../data/libraries/Glaxo_alerts.json') as f:
-                cls.alerts_dict = json.load(f)['structural_alerts']
-              
-        cls.structural_alerts = cls.alerts_dict.get('structural_alerts', None)
-        cls.rules = cls.alerts_dict.get('rules', None)
+                alerts_dict = json.load(f)['structural_alerts']
 
-        return cls.filter_dataset(smiles=cls.raw_smiles, n_jobs=n_jobs)
+        return cls.get_alerts(smiles_list=_data[smiles_col].values, alerts_dict=alerts_dict, n_jobs=n_jobs)
 
     @classmethod
     def from_csv(cls,
                  data_path: str,
                  smiles_col: str,
-                 alerts_dict:dict=None,n_jobs:int=1,
-                 sep: str = ','):
+                 alerts_dict:dict=None,
+                 n_jobs:int=1,
+                 sep: str = ',') -> pd.DataFrame:
         
-        """Factory method to process a CSV file
+        """Factory method to process a CSV file.
 
         Arguments:
 
@@ -280,28 +264,29 @@ class MolFiltering:
 
  
         Returns:
-            alerts_df, clean_dataset : `pandas.DataFrame`, `pandas.DataFrame`
+        
+            alerts_df : `pandas.DataFrame`
             
 
-                A tuple of `pandas.DataFrames` with flagged and clean molecules.
+                A `pandas.DataFrames` with flagged molecules.
+            
         """
         
         return cls.from_df(pd.read_csv(data_path, sep=sep), 
                            smiles_col=smiles_col,alerts_dict=alerts_dict)
 
 
-    @classmethod
-    def filter_dataset(cls,smiles, n_jobs:int=1):
+#     @classmethod
+#     def get_alerts(cls, smiles, alerts_dict, n_jobs:int=1) -> Tuple[pd.DataFrame, pd.DataFrame]:
         
-        """Filter a dataset"""
-                      
-        alerts_df = cls.filter_smiles_list(smiles, cls.structural_alerts, n_jobs=n_jobs)
-        
-        if isinstance(alerts_df, pd.DataFrame):       
-            clean_dataset = cls.data[~(cls.data[cls.smiles_col].isin(alerts_df[cls.smiles_col].unique()))].copy()
-            return (clean_dataset, alerts_df)
-        else:
-            cls.data['Alert_SMARTS'] = None
-            cls.data['Alert_description'] = None
-            cls.data['Alert_rule_set'] = None
-            return cls.data
+#         """Filter a dataset"""
+#         alerts_df = cls.filter_smiles_list(smiles, alerts_dict, n_jobs=n_jobs)
+
+        # if isinstance(alerts_df, pd.DataFrame):       
+        #     clean_dataset = cls.data[~(cls.data[cls.smiles_col].isin(alerts_df[cls.smiles_col].unique()))].copy()
+        #     return (clean_dataset, alerts_df)
+        # else:
+        #     cls.data['Alert_SMARTS'] = None
+        #     cls.data['Alert_description'] = None
+        #     cls.data['Alert_rule_set'] = None
+        #     return cls.data
