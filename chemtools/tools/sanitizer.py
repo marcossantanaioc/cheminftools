@@ -10,7 +10,6 @@ import pandas as pd
 import numpy as np
 
 import multiprocessing as mp
-from tqdm import tqdm
 from ..utils import convert_smiles
 from rdkit import Chem, rdBase
 from rdkit.Chem import rdchem, rdmolops, SanitizeMol
@@ -19,6 +18,12 @@ from rdkit.Chem.MolStandardize.rdMolStandardize import LargestFragmentChooser
 from rdkit.Chem.SaltRemover import SaltRemover
 
 from rdkit.Chem.MolStandardize import rdMolStandardize
+
+from fastprogress.fastprogress import master_bar, progress_bar
+from time import sleep
+
+from rdkit import RDLogger                                                                                                                                                               
+RDLogger.DisableLog('rdApp.*')   
 
 # %% ../../notebooks/sanitizer.ipynb 6
 rdBase.DisableLog('rdApp.error')
@@ -616,10 +621,10 @@ class MolCleaner:
                         cols_to_check:list=None):
         
         """Sanitize a dataset and returns ids, original SMILES and processed SMILES"""
-        
         with mp.Pool() as mp_pool:
-            sanitized_smiles = list(tqdm(mp_pool.imap(cls.process_mol, cls.raw_smiles),total=len(cls.raw_smiles)))
 
+            sanitized_smiles = list(progress_bar(mp_pool.imap(cls.process_mol, cls.raw_smiles), total=len(cls.raw_smiles), comment='Processing SMILES.'))
+                
  
             cls.data.insert(loc=1, column='processed_smiles', value=list(sanitized_smiles))
 
@@ -628,7 +633,6 @@ class MolCleaner:
             cls.data.reset_index(drop=True,inplace=True)
 
             # Remove duplicates
-
             cls.data = process_duplicates(cls.data,
                                             smiles_col='processed_smiles',
                                             act_col=cls.act_col,

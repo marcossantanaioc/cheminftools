@@ -13,7 +13,8 @@ from rdkit.DataStructs.cDataStructs import ConvertToNumpyArray
 from functools import partial
 from typing import List, Collection
 import multiprocessing as mp
-from tqdm import tqdm
+from fastprogress.fastprogress import master_bar, progress_bar
+from time import sleep
 
 # %% ../../notebooks/featurizer.ipynb 8
 def get_rdkit2d_descriptors(mol:Chem.rdchem.Mol):
@@ -156,7 +157,9 @@ class MolFeaturizer:
         
         """
         func = partial(self.process_smiles, **kwargs)
-        fps = list(map(func, tqdm(smiles_list, desc='Calculating fingerprints', position=0, leave=True)))
+        fps = list(progress_bar(map(func, smiles_list), total=len(smiles_list), comment=f'Calculating {self.descriptor_type} descriptors'))
+        #fps = list(map(func, tqdm(smiles_list, desc='Calculating fingerprints', position=0, leave=True)))
+        #fps = list(progress_bar(mp_pool.imap(cls.process_mol, cls.raw_smiles), total=len(cls.raw_smiles), comment='Processing SMILES.'))
         
         if len(fps)>1:
             return np.vstack(fps)

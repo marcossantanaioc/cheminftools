@@ -7,7 +7,6 @@ __all__ = ['MolFiltering']
 import json
 from collections import defaultdict
 import multiprocessing as mp
-from tqdm import tqdm
 import pandas as pd
 import numpy as np
 from rdkit import Chem
@@ -15,6 +14,9 @@ from .sanitizer import convert_smiles, normalize_mol, MolCleaner
 from rdkit.Chem import AllChem,rdMolDescriptors
 from rdkit.Chem.FilterCatalog import FilterCatalog, FilterCatalogParams
 from typing import List, Collection
+
+from fastprogress.fastprogress import master_bar, progress_bar
+from time import sleep
 
 # %% ../../notebooks/filtering.ipynb 5
 class MolFiltering:
@@ -176,7 +178,7 @@ class MolFiltering:
             
         try:
             with mp.Pool(n_jobs) as mp_pool:
-                all_alerts = pd.concat(list(tqdm(mp_pool.imap(filtering_func, smiles_list),total=len(smiles_list))))
+                all_alerts = pd.concat(list(progress_bar(mp_pool.imap(filtering_func, smiles_list),total=len(smiles_list), comment='Processing SMILES.')))
                 common_alert = all_alerts['Alert_description'].mode().item()
                 num_flagged = len(all_alerts[cls.smiles_col].unique())
                 print(f'Total number of flagged molecules = {num_flagged}\nMost common flag = {common_alert}')
