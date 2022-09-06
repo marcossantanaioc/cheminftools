@@ -35,7 +35,7 @@ data = pd.read_csv('../data/example_data.csv')
 # Sanitizing
 
 The
-[`MolCleaner`](https://marcossantanaioc.github.io/chemtools/sanitizer.html#molcleaner)
+[`MolCleaner`](https://marcossantanaioc.github.io/chemtools/tools.sanitizer.html#molcleaner)
 class performs sanitization tasks following the steps implemented on
 [chembl_structure_pipeline](https://github.com/chembl/ChEMBL_Structure_Pipeline)
 
@@ -83,7 +83,7 @@ processed_data = MolCleaner.from_df(data, smiles_col='smiles', act_col='pIC50', 
 # Filtering
 
 The
-[`MolFiltering`](https://marcossantanaioc.github.io/chemtools/filtering.html#molfiltering)
+[`MolFiltering`](https://marcossantanaioc.github.io/chemtools/toolsfiltering.html#molfiltering)
 class is responsible for removing compounds that match defined
 substructural alerts, including PAINS and rules defined by different
 organizations, such as GSK and University of Dundee.
@@ -137,7 +137,7 @@ mol
 # Featurization
 
 The
-[`MolFeaturizer`](https://marcossantanaioc.github.io/chemtools/featurizer.html#molfeaturizer)
+[`MolFeaturizer`](https://marcossantanaioc.github.io/chemtools/tools.featurizer.html#molfeaturizer)
 class converts SMILES into molecular descriptors. The current version
 supports Morgan fingerprints, Atom Pairs, Torsion Fingerprints, RDKit
 fingerprints and 200 constitutional descriptors, and MACCS keys.
