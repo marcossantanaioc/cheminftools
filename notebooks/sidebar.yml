@@ -1,0 +1,8 @@
+website:
+  sidebar:
+    contents:
+      - index.ipynb
+      - featurizer.ipynb
+      - filtering.ipynb
+      - sanitizer.ipynb
+      - utils.ipynb

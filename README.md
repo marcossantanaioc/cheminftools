@@ -19,13 +19,23 @@ Currently supported tasks include:
 A dataset of molecules can be standardize in just 1 line of code!
 
 ``` python
-data = pd.read_csv('../data/Lipophilicity.csv')
+import pandas as pd
+import numpy as np
+from chemtools.tools.sanitizer import MolCleaner
+from chemtools.tools.featurizer import MolFeaturizer
+from chemtools.tools.filtering import MolFiltering
+from rdkit import Chem
+import json
+```
+
+``` python
+data = pd.read_csv('../data/example_data.csv')
 ```
 
 # Sanitizing
 
 The
-[\[`MolCleaner`\](https://marcossantanaioc.github.io/chemtools/sanitizer.html#molcleaner)]('sanitizer.ipynb')
+[`MolCleaner`](https://marcossantanaioc.github.io/chemtools/sanitizer.html#molcleaner)
 class performs sanitization tasks following the steps implemented on
 [chembl_structure_pipeline](https://github.com/chembl/ChEMBL_Structure_Pipeline)
 
@@ -65,80 +75,270 @@ class performs sanitization tasks following the steps implemented on
                 select which compound to keep - the one with highest or lowest activity.
 
 ``` python
-processed_data = MolCleaner.from_df(data, smiles_col='smiles', act_col='exp', id_col='CMPD_CHEMBLID')
+processed_data = MolCleaner.from_df(data, smiles_col='smiles', act_col='pIC50', id_col='molecule_chembl_id')
 ```
 
-      2%|▏         | 90/4200 [00:00<00:25, 158.22it/s][19:31:14] Tautomer enumeration stopped at 304 tautomers: max transforms reached
-      3%|▎         | 140/4200 [00:01<00:43, 93.55it/s][19:31:15] Tautomer enumeration stopped at 714 tautomers: max transforms reached
-      5%|▌         | 213/4200 [00:02<00:40, 98.36it/s][19:31:15] Tautomer enumeration stopped at 318 tautomers: max transforms reached
-    [19:31:15] Tautomer enumeration stopped at 400 tautomers: max transforms reached
-     20%|█▉        | 833/4200 [00:04<00:19, 173.61it/s][19:31:18] Tautomer enumeration stopped at 304 tautomers: max transforms reached
-     25%|██▌       | 1063/4200 [00:05<00:15, 208.82it/s][19:31:19] Tautomer enumeration stopped at 338 tautomers: max transforms reached
-     34%|███▍      | 1426/4200 [00:08<00:32, 84.66it/s] [19:31:21] Tautomer enumeration stopped at 1000 tautomers: max tautomers reached
-     37%|███▋      | 1570/4200 [00:08<00:19, 137.70it/s][19:31:22] Tautomer enumeration stopped at 157 tautomers: max transforms reached
-    [19:31:22] Tautomer enumeration stopped at 429 tautomers: max transforms reached
-     51%|█████     | 2142/4200 [00:10<00:07, 280.52it/s][19:31:24] Tautomer enumeration stopped at 570 tautomers: max transforms reached
-     63%|██████▎   | 2654/4200 [00:12<00:07, 213.35it/s][19:31:26] Tautomer enumeration stopped at 381 tautomers: max transforms reached
-     66%|██████▌   | 2780/4200 [00:13<00:07, 196.66it/s][19:31:26] Tautomer enumeration stopped at 274 tautomers: max transforms reached
-     67%|██████▋   | 2802/4200 [00:13<00:10, 134.26it/s][19:31:28] Tautomer enumeration stopped at 1000 tautomers: max tautomers reached
-     83%|████████▎ | 3478/4200 [00:17<00:04, 179.74it/s][19:31:30] Tautomer enumeration stopped at 196 tautomers: max transforms reached
-     84%|████████▍ | 3532/4200 [00:17<00:03, 190.39it/s][19:31:31] Tautomer enumeration stopped at 157 tautomers: max transforms reached
-    [19:31:32] Tautomer enumeration stopped at 1000 tautomers: max tautomers reached
-    [19:31:32] Tautomer enumeration stopped at 213 tautomers: max transforms reached
-    100%|██████████| 4200/4200 [00:20<00:00, 207.52it/s]
-    /notebooks/chemtools/chemtools/tools/sanitizer.py:334: FutureWarning: Behavior when concatenating bool-dtype and numeric-dtype arrays is deprecated; in a future version these will cast to object dtype (instead of coercing bools to numeric values). To retain the old behavior, explicitly cast bool-dtype arrays to numeric dtype.
-      return pd.concat([no_duplicates, *processed_duplicates],axis=0)
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>processed_smiles</th>
+      <th>molecule_chembl_id</th>
+      <th>IC50</th>
+      <th>units</th>
+      <th>smiles</th>
+      <th>pIC50</th>
+      <th>molecular_weight</th>
+      <th>n_hba</th>
+      <th>n_hbd</th>
+      <th>logp</th>
+      <th>ro5_fulfilled</th>
+      <th>inchi</th>
+      <th>Stereo</th>
+      <th>duplicate</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>5347</td>
+      <td>N#Cc1cnc(Nc2cccc(Br)c2)c2cc(NC(=O)c3ccco3)ccc12</td>
+      <td>CHEMBL1641996</td>
+      <td>55600.0</td>
+      <td>nM</td>
+      <td>N#Cc1cnc(Nc2cccc(Br)c2)c2cc(NC(=O)c3ccco3)ccc12</td>
+      <td>4.254925</td>
+      <td>432.022188</td>
+      <td>5</td>
+      <td>2</td>
+      <td>5.45788</td>
+      <td>True</td>
+      <td>GRAWSTNUDRSLLQ-UHFFFAOYSA-N</td>
+      <td></td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2985</td>
+      <td>COc1cccc(-c2cn(-c3ccc(CNCCO)cc3)c3ncnc(N)c23)c1</td>
+      <td>CHEMBL424375</td>
+      <td>300.0</td>
+      <td>nM</td>
+      <td>COc1cccc(-c2cn(-c3ccc(CNCCO)cc3)c3ncnc(N)c23)c1</td>
+      <td>6.522879</td>
+      <td>389.185175</td>
+      <td>7</td>
+      <td>3</td>
+      <td>2.76020</td>
+      <td>True</td>
+      <td>QGPSFIYTQAONCS-UHFFFAOYSA-N</td>
+      <td></td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2828</td>
+      <td>Cc1ncc([N+](=O)[O-])n1CC(=NNC(=O)c1ccc(O)cc1)c...</td>
+      <td>CHEMBL3088220</td>
+      <td>210.0</td>
+      <td>nM</td>
+      <td>Cc1ncc([N+](=O)[O-])n1C/C(=N/NC(=O)c1ccc(O)cc1...</td>
+      <td>6.677781</td>
+      <td>457.038566</td>
+      <td>7</td>
+      <td>2</td>
+      <td>3.40212</td>
+      <td>True</td>
+      <td>XBPATCWTKVXDPF-UHFFFAOYSA-N</td>
+      <td></td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3898</td>
+      <td>C1CCC(C(CC2CCCCN2)C2CCCCC2)CC1</td>
+      <td>CHEMBL75880</td>
+      <td>1485.2</td>
+      <td>nM</td>
+      <td>C1CCC(C(CC2CCCCN2)C2CCCCC2)CC1</td>
+      <td>5.828215</td>
+      <td>277.276950</td>
+      <td>1</td>
+      <td>1</td>
+      <td>5.29540</td>
+      <td>True</td>
+      <td>CYXKNKQEMFBLER-UHFFFAOYSA-N</td>
+      <td>6_?</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2896</td>
+      <td>Cc1cc2cc(Nc3ccnc4cc(-c5ccc(CNCCN6CCNCC6)cc5)sc...</td>
+      <td>CHEMBL79060</td>
+      <td>250.0</td>
+      <td>nM</td>
+      <td>Cc1cc2cc(Nc3ccnc4cc(-c5ccc(CNCCN6CCNCC6)cc5)sc...</td>
+      <td>6.602060</td>
+      <td>496.240916</td>
+      <td>6</td>
+      <td>4</td>
+      <td>5.49142</td>
+      <td>True</td>
+      <td>MEAHQSFATRAJHG-UHFFFAOYSA-N</td>
+      <td></td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 # Filtering
 
 The
-[\[`MolFiltering`\](https://marcossantanaioc.github.io/chemtools/filtering.html#molfiltering)]('filtering.ipynb')
+[`MolFiltering`](https://marcossantanaioc.github.io/chemtools/filtering.html#molfiltering)
 class is responsible for removing compounds that match defined
 substructural alerts, including PAINS and rules defined by different
 organizations, such as GSK and University of Dundee.
 
 ``` python
-clean_dataset, alerts_dataset = MolFiltering.from_df(processed_data, smiles_col='processed_smiles')
+with open('../data/libraries/Glaxo_alerts.json') as f:
+    alerts_dict = json.load(f)['structural_alerts']
+    structural_alerts = alerts_dict.get('structural_alerts', None)
 ```
-
-      3%|▎         | 131/4175 [00:02<01:08, 59.34it/s][19:33:08] Tautomer enumeration stopped at 361 tautomers: max transforms reached
-      5%|▍         | 202/4175 [00:04<01:12, 54.98it/s][19:33:10] Tautomer enumeration stopped at 733 tautomers: max transforms reached
-      9%|▊         | 357/4175 [00:08<01:37, 38.96it/s][19:33:14] Tautomer enumeration stopped at 628 tautomers: max transforms reached
-     21%|██        | 856/4175 [00:21<01:43, 31.96it/s][19:33:27] Tautomer enumeration stopped at 304 tautomers: max transforms reached
-     28%|██▊       | 1159/4175 [00:28<00:43, 69.23it/s][19:33:34] Tautomer enumeration stopped at 338 tautomers: max transforms reached
-     33%|███▎      | 1381/4175 [00:33<01:25, 32.53it/s][19:33:40] Tautomer enumeration stopped at 1000 tautomers: max tautomers reached
-     37%|███▋      | 1551/4175 [00:38<00:44, 58.82it/s][19:33:45] Tautomer enumeration stopped at 1000 tautomers: max tautomers reached
-     43%|████▎     | 1797/4175 [00:44<00:35, 66.51it/s][19:33:50] Tautomer enumeration stopped at 429 tautomers: max transforms reached
-     51%|█████     | 2130/4175 [00:51<00:45, 44.53it/s][19:33:57] Tautomer enumeration stopped at 834 tautomers: max transforms reached
-     63%|██████▎   | 2638/4175 [01:03<00:27, 56.66it/s][19:34:09] Tautomer enumeration stopped at 384 tautomers: max transforms reached
-     66%|██████▌   | 2764/4175 [01:06<00:25, 54.33it/s][19:34:12] Tautomer enumeration stopped at 274 tautomers: max transforms reached
-     69%|██████▊   | 2860/4175 [01:09<00:27, 47.28it/s][19:34:15] Tautomer enumeration stopped at 953 tautomers: max transforms reached
-     84%|████████▎ | 3490/4175 [01:23<00:10, 66.00it/s][19:34:29] Tautomer enumeration stopped at 190 tautomers: max transforms reached
-     85%|████████▌ | 3553/4175 [01:25<00:11, 54.64it/s][19:34:32] Tautomer enumeration stopped at 1000 tautomers: max tautomers reached
-     94%|█████████▎| 3906/4175 [01:34<00:04, 57.99it/s][19:34:40] Tautomer enumeration stopped at 213 tautomers: max transforms reached
-    100%|█████████▉| 4166/4175 [01:39<00:00, 61.64it/s][19:34:45] Tautomer enumeration stopped at 160 tautomers: max transforms reached
-    100%|██████████| 4175/4175 [01:40<00:00, 41.74it/s]
-
-    Total number of flagged molecules = 85
-    Most common flag = R18 Quaternary C, Cl, I, P or S
 
 ``` python
-alerts_dataset.set_index('processed_smiles')['Alert_rule_set']
+alerts_data = MolFiltering.from_df(processed_data, smiles_col='processed_smiles', alerts_dict=alerts_dict)
 ```
 
-    processed_smiles
-    Cc1cccc(CC(NC(=O)c2cc(C(C)(C)C)nn2C)C(=O)NCC#N)c1                   Glaxo
-    COc1ccc(N2CCN(C(=O)C3CCCCC3C(=O)NCC#N)CC2)cc1                       Glaxo
-    c1ccc(-c2cc(NCCCCCCCCNc3cc(-c4ccccc4)nc4ccccc34)c3ccccc3n2)cc1      Glaxo
-    [O-][S+](c1ccccc1)c1ccc2nnnn2n1                                     Glaxo
-    CC1=N[SH](=O)(c2cccc(-c3ccc(C)cc3)c2)NC1=O                          Glaxo
-                                                                        ...  
-    CC[C@H](NC(=O)c1c([S+](C)[O-])c(-c2ccccc2)nc2c(F)cccc12)c1ccccc1    Glaxo
-    CCCN1CCN(c2ccc(C(=O)NC3(C(=O)NCC#N)CCCCC3)cc2)CC1                   Glaxo
-    N#CCNC(=O)C1CCCCC1C(=O)N1CCN(c2ccccc2)CC1                           Glaxo
-    NNC(=O)c1ccncc1                                                     Glaxo
-    CC[C@H](NC(=O)c1c([S+](C)[O-])c(-c2ccccc2)nc2ccccc12)c1ccccc1       Glaxo
-    Name: Alert_rule_set, Length: 87, dtype: object
+``` python
+alerts_data.head(10)
+```
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>_smiles</th>
+      <th>Alert_SMARTS</th>
+      <th>Alert_description</th>
+      <th>Alert_rule_set</th>
+      <th>Alert_num_hits</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Cc1ncc([N+](=O)[O-])n1CC(=NNC(=O)c1ccc(O)cc1)c...</td>
+      <td>[N;R0][N;R0]C(=O)</td>
+      <td>R17 acylhydrazide</td>
+      <td>Glaxo</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>O=NN(CCCl)C(=O)Nc1ccc2ncnc(Nc3cccc(Cl)c3)c2c1</td>
+      <td>[Br,Cl,I][CX4;CH,CH2]</td>
+      <td>R1 Reactive alkyl halides</td>
+      <td>Glaxo</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>O=NN(CCCl)C(=O)Nc1ccc2ncnc(Nc3cccc(Cl)c3)c2c1</td>
+      <td>[N;R0][N;R0]C(=O)</td>
+      <td>R17 acylhydrazide</td>
+      <td>Glaxo</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>O=NN(CCCl)C(=O)Nc1ccc2ncnc(Nc3cccc(Cl)c3)c2c1</td>
+      <td>[N&amp;D2](=O)</td>
+      <td>R21 Nitroso</td>
+      <td>Glaxo</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>CS(=O)(=O)O[C@H]1CN[C@H](C#Cc2cc3ncnc(Nc4ccc(O...</td>
+      <td>COS(=O)(=O)[C,c]</td>
+      <td>R5 Sulphonates</td>
+      <td>Glaxo</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>Cc1cccc(Nc2ncnc3ccc(N(C)C(=O)N(CCCl)N=O)cc23)c1</td>
+      <td>[Br,Cl,I][CX4;CH,CH2]</td>
+      <td>R1 Reactive alkyl halides</td>
+      <td>Glaxo</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Cc1cccc(Nc2ncnc3ccc(N(C)C(=O)N(CCCl)N=O)cc23)c1</td>
+      <td>[N;R0][N;R0]C(=O)</td>
+      <td>R17 acylhydrazide</td>
+      <td>Glaxo</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Cc1cccc(Nc2ncnc3ccc(N(C)C(=O)N(CCCl)N=O)cc23)c1</td>
+      <td>[N&amp;D2](=O)</td>
+      <td>R21 Nitroso</td>
+      <td>Glaxo</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>C=COC(=O)N(CCN(C)C)N=Nc1ccc2ncnc(Nc3cccc(Cl)c3...</td>
+      <td>[N;R0][N;R0]C(=O)</td>
+      <td>R17 acylhydrazide</td>
+      <td>Glaxo</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>O=C(CCl)Nc1ccc2ncnc(Nc3cccc(I)c3)c2c1</td>
+      <td>[Br,Cl,I][CX4;CH,CH2]</td>
+      <td>R1 Reactive alkyl halides</td>
+      <td>Glaxo</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 #### Quinone
 
@@ -148,7 +348,7 @@ mol.GetSubstructMatches(Chem.MolFromSmarts('O=C1[#6]~[#6]C(=O)[#6]~[#6]1'))
 mol
 ```
 
-![](index_files/figure-gfm/cell-6-output-1.png)
+![](index_files/figure-gfm/cell-10-output-1.png)
 
 #### Cynamide
 
@@ -158,7 +358,7 @@ mol1.GetSubstructMatches(Chem.MolFromSmarts('N[CH2]C#N'))
 mol1
 ```
 
-![](index_files/figure-gfm/cell-7-output-1.png)
+![](index_files/figure-gfm/cell-11-output-1.png)
 
 #### R18 Quaternary C, Cl, I, P or S
 
@@ -168,12 +368,12 @@ mol.GetSubstructMatches(Chem.MolFromSmarts('[C+,Cl+,I+,P+,S+]'))
 mol
 ```
 
-![](index_files/figure-gfm/cell-8-output-1.png)
+![](index_files/figure-gfm/cell-12-output-1.png)
 
 # Featurization
 
 The
-[\[`MolFeaturizer`\](https://marcossantanaioc.github.io/chemtools/featurizer.html#molfeaturizer)]('featurizer.ipynb')
+[`MolFeaturizer`](https://marcossantanaioc.github.io/chemtools/featurizer.html#molfeaturizer)
 class converts SMILES into molecular descriptors. The current version
 supports Morgan fingerprints, Atom Pairs, Torsion Fingerprints, RDKit
 fingerprints and 200 constitutional descriptors, and MACCS keys.
@@ -183,17 +383,37 @@ fingerprinter = MolFeaturizer('morgan')
 ```
 
 ``` python
-X = fingerprinter.process_smiles_list(clean_dataset['processed_smiles'].values)
+X = fingerprinter.process_smiles_list(processed_data['processed_smiles'].values)
 ```
 
-    Calculating fingerprints: 100%|██████████| 4090/4090 [00:01<00:00, 2752.95it/s]
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+
+    <div>
+      <progress value='500' class='' max='500' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [500/500 00:00&lt;00:00]
+    </div>
+    
 
 ``` python
 X[0:5]
 ```
 
     array([[0, 0, 0, ..., 0, 0, 0],
-           [0, 0, 0, ..., 1, 0, 0],
-           [0, 1, 0, ..., 0, 0, 0],
            [0, 0, 0, ..., 0, 0, 0],
-           [0, 0, 1, ..., 0, 0, 0]], dtype=uint8)
+           [0, 0, 0, ..., 0, 0, 0],
+           [0, 1, 1, ..., 0, 0, 0],
+           [0, 0, 0, ..., 0, 0, 1]], dtype=uint8)
