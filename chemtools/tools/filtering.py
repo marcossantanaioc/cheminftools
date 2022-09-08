@@ -27,76 +27,6 @@ class MolFiltering:
        
     """
     
-#     def __init__(self, data=None, smiles_col=None, smiles=None):
-
-
-#         self.raw_smiles = None
-#         self.smiles_col = None
-#         self.id_col = None
-#         self.data = None
-#         self.alerts_dict = None
-#         self.rules = None
-#         self.structural_alerts = None
-        
-    
-#     @property
-#     def alerts_dict(self):
-#         return self._alerts_dict
-
-#     @alerts_dict.setter
-#     def alerts_dict(self, i):
-#         self._alerts_dict = i
-        
-#     @property
-#     def structural_alerts(self):
-#         return self._structural_alerts
-
-#     @structural_alerts.setter
-#     def structural_alerts(self, i):
-#         self._structural_alerts = i
-        
-#     @property
-#     def rules(self):
-#         return self._rules
-
-#     @rules.setter
-#     def rules(self, i):
-#         self._rules = i        
-        
-#     @property
-#     def data(self):
-#         return self._data
-
-#     @data.setter
-#     def data(self, i):
-#         self._data = i
-
-#     @property
-#     def raw_smiles(self):
-#         return self._raw_smiles
-
-#     @raw_smiles.setter
-#     def raw_smiles(self, i):
-#         self._raw_smiles = i
-
-#     @property
-#     def smiles_col(self):
-#         return self._smiles_col
-
-#     @smiles_col.setter
-#     def smiles_col(self, i):
-#         self._smiles_col = i
-        
-#     @property
-#     def id_col(self):
-#         return self._id_col
-
-#     @id_col.setter
-#     def id_col(self, i):
-#         self._id_col = i
-        
-
-        
     @classmethod
     def get_mol_alerts(cls, smi, alerts_dict:dict) -> pd.DataFrame:
 
@@ -275,18 +205,3 @@ class MolFiltering:
         return cls.from_df(pd.read_csv(data_path, sep=sep), 
                            smiles_col=smiles_col,alerts_dict=alerts_dict)
 
-
-#     @classmethod
-#     def get_alerts(cls, smiles, alerts_dict, n_jobs:int=1) -> Tuple[pd.DataFrame, pd.DataFrame]:
-        
-#         """Filter a dataset"""
-#         alerts_df = cls.filter_smiles_list(smiles, alerts_dict, n_jobs=n_jobs)
-
-        # if isinstance(alerts_df, pd.DataFrame):       
-        #     clean_dataset = cls.data[~(cls.data[cls.smiles_col].isin(alerts_df[cls.smiles_col].unique()))].copy()
-        #     return (clean_dataset, alerts_df)
-        # else:
-        #     cls.data['Alert_SMARTS'] = None
-        #     cls.data['Alert_description'] = None
-        #     cls.data['Alert_rule_set'] = None
-        #     return cls.data
