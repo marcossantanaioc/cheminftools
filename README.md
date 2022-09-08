@@ -12,7 +12,7 @@ Currently supported tasks include:
 
     2 - Calculation of molecular descriptors
 
-    3 - Filtering datasets using predefined alerts (e.g. PAINS, Dundee, Glaxo)
+    3 - Filtering datasets using predefined alerts (e.g. PAINS, Dundee, Glaxo, etc)
 
 # Standardization
 
