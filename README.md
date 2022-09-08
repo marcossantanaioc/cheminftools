@@ -77,10 +77,6 @@ class performs sanitization tasks, including:
 processed_data = MolCleaner.from_df(data, smiles_col='smiles', act_col='pIC50', id_col='molecule_chembl_id')
 ```
 
-``` python
-print(processed_data[['processed_smiles','smiles']].head(5).to_markdown(index=False,tablefmt="grid",stralign='center'))
-```
-
     +------------------------------------------------------------+-------------------------------------------------------------+
     |                      processed_smiles                      |                           smiles                            |
     +============================================================+=============================================================+
@@ -111,10 +107,6 @@ with open('../data/libraries/Glaxo_alerts.json') as f:
 
 ``` python
 alerts_data = MolFiltering.from_df(processed_data, smiles_col='processed_smiles', alerts_dict=alerts_dict)
-```
-
-``` python
-print(alerts_data.head(5).to_markdown(index=False,tablefmt="grid",stralign='center'))
 ```
 
     +----------------------------------------------------------------------------+-----------------------+---------------------------+------------------+------------------+
@@ -176,25 +168,6 @@ fingerprinter = MolFeaturizer('morgan')
 ``` python
 X = fingerprinter.process_smiles_list(processed_data['processed_smiles'].values)
 ```
-
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-
-    <div>
-      <progress value='500' class='' max='500' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [500/500 00:00<00:00]
-    </div>
-    
 
 ``` python
 X[0:5]
