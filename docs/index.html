@@ -202,6 +202,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <a href="./utils.html" class="sidebar-item-text sidebar-link">Utils</a>
   </div>
 </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">docs</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  docs/index.html
+  </li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -256,7 +269,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 2 - Calculation of molecular descriptors
 
-3 - Filtering datasets using predefined alerts (e.g. PAINS, Dundee, Glaxo, etc)</code></pre>
+3 - Filtering datasets using predefined alerts (e.g. PAINS, Dundee, Glaxo, etc.)</code></pre>
 </section>
 <section id="standardization" class="level1">
 <h1>Standardization</h1>
@@ -314,7 +327,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>processed_data <span class="op">=</span> MolCleaner.from_df(data, smiles_col<span class="op">=</span><span class="st">'smiles'</span>, act_col<span class="op">=</span><span class="st">'pIC50'</span>, id_col<span class="op">=</span><span class="st">'molecule_chembl_id'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="30">
+<div class="cell" data-execution_count="5">
 <div class="cell-output cell-output-stdout">
 <pre><code>+------------------------------------------------------------+-------------------------------------------------------------+
 |                      processed_smiles                      |                           smiles                            |
@@ -335,15 +348,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="filtering" class="level1">
 <h1>Filtering</h1>
 <p>The <a href="https://marcossantanaioc.github.io/chemtools/filtering.html#molfiltering"><code>MolFiltering</code></a> class is responsible for removing compounds that match defined substructural alerts, including PAINS and rules defined by different organizations, such as GSK and University of Dundee.</p>
-<div class="cell" data-execution_count="11">
+<div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'../data/libraries/Glaxo_alerts.json'</span>) <span class="im">as</span> f:</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    alerts_dict <span class="op">=</span> json.load(f)[<span class="st">'structural_alerts'</span>]</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    structural_alerts <span class="op">=</span> alerts_dict.get(<span class="st">'structural_alerts'</span>, <span class="va">None</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="12">
+<div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>alerts_data <span class="op">=</span> MolFiltering.from_df(processed_data, smiles_col<span class="op">=</span><span class="st">'processed_smiles'</span>, alerts_dict<span class="op">=</span>alerts_dict)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="28">
+<div class="cell" data-execution_count="8">
 <div class="cell-output cell-output-stdout">
 <pre><code>+----------------------------------------------------------------------------+-----------------------+---------------------------+------------------+------------------+
 |                                  _smiles                                   |     Alert_SMARTS      |     Alert_description     |  Alert_rule_set  |   Alert_num_hits |
@@ -362,33 +375,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <section id="quinone" class="level4">
 <h4 class="anchored" data-anchor-id="quinone">Quinone</h4>
-<div class="cell" data-execution_count="14">
+<div class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>mol <span class="op">=</span> Chem.MolFromSmiles(<span class="st">'COC1/C=C\OC2(C)Oc3c(C)c(O)c4c(c3C2=O)C(=O)C=C(NC(=O)/C(C)=C\C=C/C(C)C(O)C(C)C(O)C(C)C(OC(C)=O)C1C)C4=O'</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>mol.GetSubstructMatches(Chem.MolFromSmarts(<span class="st">'O=C1[#6]~[#6]C(=O)[#6]~[#6]1'</span>))</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>mol</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="14">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <p><img src="index_files/figure-html/cell-10-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 </section>
 <section id="cynamide" class="level4">
 <h4 class="anchored" data-anchor-id="cynamide">Cynamide</h4>
-<div class="cell" data-execution_count="15">
+<div class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>mol1 <span class="op">=</span> Chem.MolFromSmiles(<span class="st">'Cc1cccc(C[C@H](NC(=O)c2cc(C(C)(C)C)nn2C)C(=O)NCC#N)c1'</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>mol1.GetSubstructMatches(Chem.MolFromSmarts(<span class="st">'N[CH2]C#N'</span>))</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>mol1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="15">
+<div class="cell-output cell-output-display" data-execution_count="10">
 <p><img src="index_files/figure-html/cell-11-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 </section>
 <section id="r18-quaternary-c-cl-i-p-or-s" class="level4">
 <h4 class="anchored" data-anchor-id="r18-quaternary-c-cl-i-p-or-s">R18 Quaternary C, Cl, I, P or S</h4>
-<div class="cell" data-execution_count="16">
+<div class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>mol <span class="op">=</span> Chem.MolFromSmiles(<span class="st">'CC[C@H](NC(=O)c1c([S+](C)[O-])c(-c2ccccc2)nc2ccccc12)c1ccccc1'</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>mol.GetSubstructMatches(Chem.MolFromSmarts(<span class="st">'[C+,Cl+,I+,P+,S+]'</span>))</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>mol</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="16">
+<div class="cell-output cell-output-display" data-execution_count="11">
 <p><img src="index_files/figure-html/cell-12-output-1.png" class="img-fluid"></p>
 </div>
 </div>
@@ -397,21 +410,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="featurization" class="level1">
 <h1>Featurization</h1>
 <p>The <a href="https://marcossantanaioc.github.io/chemtools/featurizer.html#molfeaturizer"><code>MolFeaturizer</code></a> class converts SMILES into molecular descriptors. The current version supports Morgan fingerprints, Atom Pairs, Torsion Fingerprints, RDKit fingerprints and 200 constitutional descriptors, and MACCS keys.</p>
-<div class="cell" data-execution_count="17">
+<div class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>fingerprinter <span class="op">=</span> MolFeaturizer(<span class="st">'morgan'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> fingerprinter.process_smiles_list(processed_data[<span class="st">'processed_smiles'</span>].values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>X[<span class="dv">0</span>:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="19">
-<pre><code>array([[0, 0, 0, ..., 0, 0, 0],
-       [0, 0, 0, ..., 0, 0, 0],
-       [0, 0, 0, ..., 0, 0, 0],
-       [0, 1, 1, ..., 0, 0, 0],
-       [0, 0, 0, ..., 0, 0, 1]], dtype=uint8)</code></pre>
-</div>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> fingerprinter.process_smiles_list(processed_data[<span class="st">'processed_smiles'</span>].values)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>X[<span class="dv">0</span>:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

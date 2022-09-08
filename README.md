@@ -12,7 +12,7 @@ Currently supported tasks include:
 
     2 - Calculation of molecular descriptors
 
-    3 - Filtering datasets using predefined alerts (e.g. PAINS, Dundee, Glaxo, etc)
+    3 - Filtering datasets using predefined alerts (e.g. PAINS, Dundee, Glaxo, etc.)
 
 # Standardization
 
@@ -167,14 +167,5 @@ fingerprinter = MolFeaturizer('morgan')
 
 ``` python
 X = fingerprinter.process_smiles_list(processed_data['processed_smiles'].values)
-```
-
-``` python
 X[0:5]
 ```
-
-    array([[0, 0, 0, ..., 0, 0, 0],
-           [0, 0, 0, ..., 0, 0, 0],
-           [0, 0, 0, ..., 0, 0, 0],
-           [0, 1, 1, ..., 0, 0, 0],
-           [0, 0, 0, ..., 0, 0, 1]], dtype=uint8)
