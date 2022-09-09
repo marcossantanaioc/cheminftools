@@ -6,6 +6,3 @@ website:
       - filtering.ipynb
       - sanitizer.ipynb
       - utils.ipynb
-      - section: docs
-        contents:
-          - docs/index.html

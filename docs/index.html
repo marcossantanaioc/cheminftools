@@ -202,19 +202,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <a href="./utils.html" class="sidebar-item-text sidebar-link">Utils</a>
   </div>
 </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">docs</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  docs/index.html
-  </li>
-      </ul>
-  </li>
     </ul>
     </div>
 </nav>
@@ -329,19 +316,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div class="cell" data-execution_count="5">
 <div class="cell-output cell-output-stdout">
-<pre><code>+------------------------------------------------------------+-------------------------------------------------------------+
-|                      processed_smiles                      |                           smiles                            |
-+============================================================+=============================================================+
-|      N#Cc1cnc(Nc2cccc(Br)c2)c2cc(NC(=O)c3ccco3)ccc12       |       N#Cc1cnc(Nc2cccc(Br)c2)c2cc(NC(=O)c3ccco3)ccc12       |
-+------------------------------------------------------------+-------------------------------------------------------------+
-|      COc1cccc(-c2cn(-c3ccc(CNCCO)cc3)c3ncnc(N)c23)c1       |       COc1cccc(-c2cn(-c3ccc(CNCCO)cc3)c3ncnc(N)c23)c1       |
-+------------------------------------------------------------+-------------------------------------------------------------+
-| Cc1ncc([N+](=O)[O-])n1CC(=NNC(=O)c1ccc(O)cc1)c1ccc(Br)cc1  | Cc1ncc([N+](=O)[O-])n1C/C(=N/NC(=O)c1ccc(O)cc1)c1ccc(Br)cc1 |
-+------------------------------------------------------------+-------------------------------------------------------------+
-|               C1CCC(C(CC2CCCCN2)C2CCCCC2)CC1               |               C1CCC(C(CC2CCCCN2)C2CCCCC2)CC1                |
-+------------------------------------------------------------+-------------------------------------------------------------+
-| Cc1cc2cc(Nc3ccnc4cc(-c5ccc(CNCCN6CCNCC6)cc5)sc34)ccc2[nH]1 | Cc1cc2cc(Nc3ccnc4cc(-c5ccc(CNCCN6CCNCC6)cc5)sc34)ccc2[nH]1  |
-+------------------------------------------------------------+-------------------------------------------------------------+</code></pre>
+<pre><code>+-------------------------------------------------------------+-------------------------------------------------------------+
+|                      processed_smiles                       |                           smiles                            |
++=============================================================+=============================================================+
+|       N#Cc1cnc(Nc2cccc(Br)c2)c2cc(NC(=O)c3ccco3)ccc12       |       N#Cc1cnc(Nc2cccc(Br)c2)c2cc(NC(=O)c3ccco3)ccc12       |
++-------------------------------------------------------------+-------------------------------------------------------------+
+|       COc1cccc(-c2cn(-c3ccc(CNCCO)cc3)c3ncnc(N)c23)c1       |       COc1cccc(-c2cn(-c3ccc(CNCCO)cc3)c3ncnc(N)c23)c1       |
++-------------------------------------------------------------+-------------------------------------------------------------+
+| Cc1ncc([N+](=O)[O-])n1C/C(=N/NC(=O)c1ccc(O)cc1)c1ccc(Br)cc1 | Cc1ncc([N+](=O)[O-])n1C/C(=N/NC(=O)c1ccc(O)cc1)c1ccc(Br)cc1 |
++-------------------------------------------------------------+-------------------------------------------------------------+
+|               C1CCC(C(CC2CCCCN2)C2CCCCC2)CC1                |               C1CCC(C(CC2CCCCN2)C2CCCCC2)CC1                |
++-------------------------------------------------------------+-------------------------------------------------------------+
+| Cc1cc2cc(Nc3ccnc4cc(-c5ccc(CNCCN6CCNCC6)cc5)sc34)ccc2[nH]1  | Cc1cc2cc(Nc3ccnc4cc(-c5ccc(CNCCN6CCNCC6)cc5)sc34)ccc2[nH]1  |
++-------------------------------------------------------------+-------------------------------------------------------------+</code></pre>
 </div>
 </div>
 </section>
@@ -361,7 +348,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>+----------------------------------------------------------------------------+-----------------------+---------------------------+------------------+------------------+
 |                                  _smiles                                   |     Alert_SMARTS      |     Alert_description     |  Alert_rule_set  |   Alert_num_hits |
 +============================================================================+=======================+===========================+==================+==================+
-|         Cc1ncc([N+](=O)[O-])n1CC(=NNC(=O)c1ccc(O)cc1)c1ccc(Br)cc1          |   [N;R0][N;R0]C(=O)   |     R17 acylhydrazide     |      Glaxo       |                1 |
+|        Cc1ncc([N+](=O)[O-])n1C/C(=N/NC(=O)c1ccc(O)cc1)c1ccc(Br)cc1         |   [N;R0][N;R0]C(=O)   |     R17 acylhydrazide     |      Glaxo       |                1 |
 +----------------------------------------------------------------------------+-----------------------+---------------------------+------------------+------------------+
 |               O=NN(CCCl)C(=O)Nc1ccc2ncnc(Nc3cccc(Cl)c3)c2c1                | [Br,Cl,I][CX4;CH,CH2] | R1 Reactive alkyl halides |      Glaxo       |                1 |
 +----------------------------------------------------------------------------+-----------------------+---------------------------+------------------+------------------+
