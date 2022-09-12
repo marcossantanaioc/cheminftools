@@ -446,7 +446,7 @@ class MolCleaner:
 
         df = pd.DataFrame({smiles_col:smiles_list, 
                            id_col:[f'mol{idx}' for idx in range(len(smiles_list))],
-                          act_col:[None]})
+                          act_col:[-9999]*len(smiles_list)})
 
 
         return cls.from_df(df, 

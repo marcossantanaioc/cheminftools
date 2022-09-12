@@ -162,10 +162,10 @@ supports Morgan fingerprints, Atom Pairs, Torsion Fingerprints, RDKit
 fingerprints and 200 constitutional descriptors, and MACCS keys.
 
 ``` python
-fingerprinter = MolFeaturizer('morgan')
+fingerprinter = MolFeaturizer('rdkit2d')
 ```
 
 ``` python
 X = fingerprinter.process_smiles_list(processed_data['processed_smiles'].values)
-X[0:5]
+X[0:5,0:5]
 ```
