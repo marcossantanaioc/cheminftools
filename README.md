@@ -167,5 +167,8 @@ fingerprinter = MolFeaturizer('rdkit2d')
 
 ``` python
 X = fingerprinter.process_smiles_list(processed_data['processed_smiles'].values)
+```
+
+``` python
 X[0:5,0:5]
 ```
