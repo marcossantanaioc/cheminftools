@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = ['MolFeaturizer']
 
-# %% ../../notebooks/featurizer.ipynb 2
+# %% ../../notebooks/featurizer.ipynb 3
 import pandas as pd
 import numpy as np
 from rdkit import Chem
@@ -21,32 +21,19 @@ class MolFeaturizer:
     
     """Creates a Fingerprinter to perform molecular featurization
 
-    Attributes:
-
-        params : dict, optional
-            A dictionary of parameters for an rdkit generator.
-
-        descriptor_type : str
-            A string representing a descriptor available in ´rdFingerprintGenerator´
-            Available descriptors are morgan, atom_pairs, rdkit, rdkit2d, torsion and maccs
-
-        generator : 
-            A fingerprinter generator available in ´rdFingerprintGenerator´
-            
-
-
-    Arguments:
-
-        descriptor_type : str
-            A string representing a descriptor available in ´rdFingerprintGenerator´
-
-        params : dict, optional
-            A dictionary of parameters for an rdkit generator.
-
+    Attributes
+    ----------
+    params
+        A dictionary of parameters for an rdkit generator.
+    descriptor_type
+        A string representing a descriptor available in ´rdFingerprintGenerator´
+        Available descriptors are morgan, atom_pairs, rdkit, rdkit2d, torsion and maccs
+    generator
+        A fingerprinter generator available in ´rdFingerprintGenerator´
 
           """
               
-    def __init__(self, descriptor_type : str, params:dict={}):
+    def __init__(self, descriptor_type:str, params:dict={}):
         
         self.params = params
         self.descriptor_type = descriptor_type
@@ -109,20 +96,19 @@ class MolFeaturizer:
         return generator
     
     
-    def process_smiles(self, smi, use_counts:bool=False):
+    def process_smiles(self, smi:str, use_counts:bool=False) -> np.array:
         
         """
         Generate features for one SMILES.
         
-        Arguments:
-        
-            smi : str
-                A SMILES representing a molecular structure
-                
-            use_counts : bool (default=False)
-                Whether to consider feature's counts for fingerprint generation.
-                
-                
+        Arguments
+        ---------
+        smi
+            A SMILES representing a molecular structure
+        use_counts
+            Whether to consider feature's counts for fingerprint generation.
+
+
         
         """
         mol = convert_smiles(smi,sanitize=True)
@@ -147,24 +133,24 @@ class MolFeaturizer:
             fps = self.generator.GetFingerprintAsNumPy(mol)
             return fps.reshape(1, -1)
     
-    def process_smiles_list(self, smiles_list : List[str], **kwargs):
+    def process_smiles_list(self, smiles_list : List[str], use_counts:bool=False) -> np.array:
         
         """
         Generate features for a list of SMILES.
         
-        Arguments:
-        
-            smiles_list : List[str]
-                A list of SMILES.
-                
-        Keyword arguments:
-        
-            use_counts : bool (default=False)
-                Whether to consider feature's counts for fingerprint generation.
-                
-        
+        Arguments
+        ---------   
+        smiles_list
+            A list of SMILES.
+            
+        Returns
+        -------  
+        fps
+            A fingerprint array.
+                                    
         """
-        func = partial(self.process_smiles, **kwargs)
+        
+        func = partial(self.process_smiles, use_counts=use_counts)
         fps = list(progress_bar(map(func, smiles_list), total=len(smiles_list)))
         
         if len(fps)>1:
@@ -177,13 +163,15 @@ class MolFeaturizer:
         """
         Generates 200 RDKit constitutional descriptors for a `mol` object.
 
-        Arguments:
-            mol : Chem.rdchem.Mol
-                A RDKit Mol object.
+        Arguments
+        ---------
+        mol : Chem.rdchem.Mol
+            A RDKit Mol object.
 
-        Returns:
-            descs : numpy.array
-                An array with the calculated descriptors.
+        Returns
+        -------
+        descs : numpy.array
+            An array with the calculated descriptors.
 
 
         """
