@@ -131,7 +131,7 @@ mol.GetSubstructMatches(Chem.MolFromSmarts('O=C1[#6]~[#6]C(=O)[#6]~[#6]1'))
 mol
 ```
 
-![](index_files/figure-gfm/cell-10-output-1.png)
+![](index_files/figure-commonmark/cell-10-output-1.png)
 
 #### Cynamide
 
@@ -141,7 +141,7 @@ mol1.GetSubstructMatches(Chem.MolFromSmarts('N[CH2]C#N'))
 mol1
 ```
 
-![](index_files/figure-gfm/cell-11-output-1.png)
+![](index_files/figure-commonmark/cell-11-output-1.png)
 
 #### R18 Quaternary C, Cl, I, P or S
 
@@ -151,7 +151,7 @@ mol.GetSubstructMatches(Chem.MolFromSmarts('[C+,Cl+,I+,P+,S+]'))
 mol
 ```
 
-![](index_files/figure-gfm/cell-12-output-1.png)
+![](index_files/figure-commonmark/cell-12-output-1.png)
 
 # Featurization
 

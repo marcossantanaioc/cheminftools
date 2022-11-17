@@ -27,8 +27,8 @@ RDLogger.DisableLog('rdApp.*')
 
 # %% ../../notebooks/sanitizer.ipynb 6
 #_saltremover = SaltRemover()
-#_unwanted = Chem.MolFromSmarts('[!#1!#5!#6!#7!#8!#9!#15!#16!#17!#35!#53]')
-_allowed_atoms = [Atom(i) for i in [1,5,6,7,8,9,15,16,17,35,53]]
+#periodic_table = Chem.GetPeriodicTable()
+_allowed_atoms = [Atom(i) for i in [1,3,4,5,6,7,8,9,11,12,13,15,16,17,19,20,21,22,23,24,25,26,27,28,29,30,31,35,37,38,39,40,41,42,43,44,45,46,47,48,49,50,53,55,56,72,73,74,75,76,77,78,79,80,81,82,83,84,87,88]]
 
 # %% ../../notebooks/sanitizer.ipynb 7
 def mol_to_inchi(mol):
