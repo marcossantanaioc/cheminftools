@@ -48,10 +48,6 @@ setuptools.setup(
     long_description = open('README.md').read(),
     long_description_content_type = 'text/markdown',
     zip_safe = False,
-    entry_points = {
-        'console_scripts': cfg.get('console_scripts','').split(),
-        'nbdev': [f'{cfg.get("lib_path")}={cfg.get("lib_path")}._modidx:d']
-    },
     **setup_cfg)
 
 
