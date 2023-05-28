@@ -65,13 +65,12 @@ class DataLoaders:
 
 class MolDataLoader(DataLoader):
 
-    @classmethod
-    def dataloaders(cls,
-                    datasets: Tuple[MolDataset, MolDataset],
-                    batch_size: int = 32,
-                    shuffle: bool = True,
-                    collate_fn=None,
-                    drop_last: bool = True):
+    def __call__(self,
+                 datasets: Tuple[MolDataset],
+                 batch_size: int = 32,
+                 shuffle: bool = True,
+                 collate_fn=None,
+                 drop_last: bool = True):
 
         if collate_fn is None:
             raise ValueError('The collate function is invalid. Please pass a valid function.')
