@@ -168,9 +168,3 @@ class MolFeaturizer:
         descriptor_dict = {name: func for name, func in Descriptors.descList if name in self.RDKIT_PROPERTIES}
         descs = np.array([func(mol) for name, func in descriptor_dict.items()]).reshape(1, -1)
         return descs
-
-if __name__ == '__main__':
-    mol = ['c1ccccc1']
-    featurizer = MolFeaturizer('morgan')
-    x = featurizer.transform(mol)
-    print(x)

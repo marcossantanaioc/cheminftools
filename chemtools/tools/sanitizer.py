@@ -1,5 +1,6 @@
-# __all__ = ['mol_to_inchi', 'add_nitrogen_charges', 'remove_unwanted',
-#            'normalize_mol', 'get_stereo_info', 'process_stereo_duplicates', 'MolCleaner']
+__all__ = ['mol_to_inchi', 'add_nitrogen_charges',
+           'remove_unwanted', 'normalize_mol', 'get_stereo_info',
+           'process_stereo_duplicates', 'MolCleaner']
 
 from typing import List
 import numpy as np
