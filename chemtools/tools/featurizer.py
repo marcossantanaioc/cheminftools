@@ -2,7 +2,7 @@ __all__ = ['MolFeaturizer']
 
 import numpy as np
 from rdkit import Chem
-from ..utils import convert_smiles
+from chemtools.utils import convert_smiles
 from rdkit.Chem import MACCSkeys, rdFingerprintGenerator, Descriptors
 from rdkit.DataStructs.cDataStructs import ConvertToNumpyArray
 from functools import partial
@@ -19,7 +19,7 @@ class MolFeaturizer:
         A dictionary of parameters for an rdkit generator.
     descriptor_type
         A string representing a descriptor available in ´rdFingerprintGenerator´
-        Available descriptors are morgan, atom_pairs, rdkit, rdkit2d, torsion and maccs
+        Available descriptors are morgan, atom_pairs, rdkit, rdkit2d, torsion and maccs, erg
     generator
         A fingerprinter generator available in ´rdFingerprintGenerator´
 
@@ -168,3 +168,9 @@ class MolFeaturizer:
         descriptor_dict = {name: func for name, func in Descriptors.descList if name in self.RDKIT_PROPERTIES}
         descs = np.array([func(mol) for name, func in descriptor_dict.items()]).reshape(1, -1)
         return descs
+
+if __name__ == '__main__':
+    mol = ['c1ccccc1']
+    featurizer = MolFeaturizer('morgan')
+    x = featurizer.transform(mol)
+    print(x)
