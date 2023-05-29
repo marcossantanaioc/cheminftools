@@ -1,5 +1,5 @@
 name: pipeline # Name of the workflow
-on: push # Make sure we can activate workflow manually.
+on: push # Trigger - Make sure we can activate workflow manually.
 jobs:
   build: # Name of first job.
     runs-on: ubuntu-latest # Defines the runner that will run the job.
@@ -14,17 +14,6 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install flake8
           python setup.py install
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
-        with:
-          python-version: '3.x'
       - name: flake8
         run: |
-          # stop the build if there are Python syntax errors or undefined names
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+            flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
