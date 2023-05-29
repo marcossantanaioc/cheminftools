@@ -7,8 +7,11 @@ jobs:
       matrix:
         python-version: ["3.x"]
     steps: # Steps in the job
-      - name: print greeting
-        #uses: actions/setup-python@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+      - name: install
+        with:
+          python-version: ${{ matrix.python-version }}
         run: |
           echo "Installing chemtools"
           python -m pip install --upgrade pip
