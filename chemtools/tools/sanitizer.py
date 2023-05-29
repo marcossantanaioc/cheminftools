@@ -162,7 +162,7 @@ def remove_unwanted(mol,
     return mol
 
 
-def normalize_mol(mol):
+def normalize_mol(mol: Union[str, Chem.Mol]) -> Chem.Mol:
     """
     Standardize a rdchem.Mol object.
 
