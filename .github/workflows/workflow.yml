@@ -3,14 +3,13 @@ on: push # Make sure we can activate workflow manually.
 jobs:
   build: # Name of first job.
     runs-on: ubuntu-latest # Defines the runner that will run the job.
+    strategy:
+      matrix:
+        python-version: ["3.x"]
     steps: # Steps in the job
       - name: print greeting
+        #uses: actions/setup-python@v3
         run: |
           echo "Installing chemtools"
-          cd chemtools && pip install -e .
-
-      - name: finish up
-        run: |
-          echo "Finishing the job"
-
-
+          python -m pip install --upgrade pip
+          python -m pip install flake8
