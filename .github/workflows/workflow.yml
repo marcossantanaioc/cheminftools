@@ -3,14 +3,9 @@ on: push # Make sure we can activate workflow manually.
 jobs:
   build: # Name of first job.
     runs-on: ubuntu-latest # Defines the runner that will run the job.
-    strategy:
-      matrix:
-        python-version: ["3.x"]
     steps: # Steps in the job
-      - uses: actions/setup-python@v3
+      #- uses: actions/setup-python@v3
       - name: install
-        with:
-          python-version: ${{ matrix.python-version }}
         run: |
           echo "Installing chemtools"
           python -m pip install --upgrade pip
