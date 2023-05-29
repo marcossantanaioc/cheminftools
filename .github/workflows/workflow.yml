@@ -19,6 +19,18 @@ jobs:
         with:
           name: chemtools_artifact
           path: .
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
+      - name: flake8
+        run: |
+            pwd
+        
+
 #      - name: store artifacts
 #      - uses: actions/upload-artifact@v3
 #        with:
