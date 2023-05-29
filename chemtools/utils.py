@@ -19,11 +19,11 @@ def get_delta_act(x):
 
 
 def convert_smiles(mol, sanitize=False):
-    if isinstance(mol, str):
-        try:
-            mol = Chem.MolFromSmiles(mol, sanitize=sanitize)
+    if isinstance(mol, str) and mol != '':
+        mol = Chem.MolFromSmiles(mol, sanitize=sanitize)
+        if mol:
             return mol
-        except:
+        else:
             return None
     elif isinstance(mol, Chem.Mol):
         return mol

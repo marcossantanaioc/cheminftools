@@ -2,6 +2,7 @@ __all__ = ['MolFeaturizer']
 
 import numpy as np
 from rdkit import Chem
+from ctypes import ArgumentError
 from chemtools.utils import convert_smiles
 from rdkit.Chem import MACCSkeys, rdFingerprintGenerator, Descriptors
 from rdkit.DataStructs.cDataStructs import ConvertToNumpyArray
@@ -80,7 +81,7 @@ class MolFeaturizer:
         try:
             generator = generator(**params)
 
-        except:
+        except ArgumentError:
             print(
                 f'The parameters {params} are not valid for generator {self.DESCS[self.descriptor_type].__name__}.'
                 f'\nSee RDKit: https://www.rdkit.org/docs/source/rdkit.Chem.rdFingerprintGenerator.html')
