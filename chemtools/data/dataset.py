@@ -52,7 +52,7 @@ class MolDataset(Dataset):
         x, target
             A tuple of features and target variable
         """
-        target = torch.tensor(self.data[idx][1]).to(torch.float32).view(-1, 1).to(DEVICE)
+        target = torch.tensor(self.data[idx][1]).to(torch.float32).view(-1, ).to(DEVICE)
         smi = self.data[idx][0]
 
         x = torch.from_numpy(self.featurizer.transform_one(smi)).to(torch.float32).squeeze().to(DEVICE)
