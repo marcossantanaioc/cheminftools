@@ -1,0 +1,3 @@
+[flake8]
+ignore = E712, E302, W292, W293, W291, E203, E231, E501, E731, W503, W605, E125,ME127, E126, F541
+exclude = .git,__pycache__
