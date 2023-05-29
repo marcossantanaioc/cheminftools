@@ -83,7 +83,7 @@ class MolDataLoader:
                               drop_last=self.drop_last)
         valid_dl = DataLoader(self.datasets[1], batch_size=self.batch_size * 2, shuffle=valid_shuffle,
                               collate_fn=self.collate_fn,
-                              drop_last=self.drop_last)
+                              drop_last=False)
 
         dls = MolDataLoaders(train_dl, valid_dl)
 
