@@ -14,3 +14,13 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install flake8
           python setup.py install
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
+      - name: flake8
+        run: |
+            echo "Running flake8"
