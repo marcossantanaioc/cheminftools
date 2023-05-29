@@ -29,7 +29,8 @@ jobs:
           python-version: '3.x'
       - name: flake8
         run: |
-            pwd
+            flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+            
         
 
 #      - name: store artifacts
@@ -40,4 +41,4 @@ jobs:
 #      - name: flake8
 #        run: |
 #            pwd
-#            flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+#
