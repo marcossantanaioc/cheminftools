@@ -77,7 +77,6 @@ class MolDataLoader:
     def __call__(self):
         train_shuffle = self.shuffle
         valid_shuffle = not train_shuffle
-        dls = []
 
         self.train_dl = DataLoader(self.datasets[0], batch_size=self.batch_size, shuffle=train_shuffle,
                                    collate_fn=self.collate_fn,
@@ -86,8 +85,6 @@ class MolDataLoader:
                                    collate_fn=self.collate_fn,
                                    drop_last=self.drop_last)
 
-        dls.extend([self.train_dl, self.valid_dl])
-
-        self.dls = MolDataLoaders(dls)
+        self.dls = MolDataLoaders([self.train_dl, self.valid_dl])
 
         return self.dls
