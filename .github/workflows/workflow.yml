@@ -5,8 +5,12 @@ jobs:
     runs-on: ubuntu-latest # Defines the runner that will run the job.
     steps: # Steps in the job
       - name: print greeting
-        run: echo "Hello world"
+        run: |
+          echo "Hello world"
+          echo "Testing multiline"
+
       - name: finish up
-        run: echo "Finishing the job"
+        run: |
+          echo "Finishing the job"
 
 
