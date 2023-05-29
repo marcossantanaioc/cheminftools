@@ -4,10 +4,10 @@ jobs:
   build: # Name of first job.
     runs-on: ubuntu-latest # Defines the runner that will run the job.
     steps: # Steps in the job
-      #- uses: actions/setup-python@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
       - name: install
         run: |
           echo "Installing chemtools"
           python -m pip install --upgrade pip
           python -m pip install flake8
-          pip install -e .
