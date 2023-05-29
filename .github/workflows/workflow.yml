@@ -1,0 +1,8 @@
+name: pipeline # Name of the workflow
+on: workflow_dispatch # Make sure we can activate workflow manually.
+jobs:
+  build: # Name of first job.
+    runs-on: ubuntu-22.04 # Defines the runner that will run the job.
+    steps: # Steps in the job
+      - echo "Testing"
+
