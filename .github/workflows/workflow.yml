@@ -7,7 +7,7 @@ jobs:
       - name: print greeting
         run: |
           echo "Installing chemtools"
-          ls .
+          cd chemtools && pip install -e .
 
       - name: finish up
         run: |
