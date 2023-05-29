@@ -1,5 +1,5 @@
 from typing import Dict, Tuple, List
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import DataLoader, Dataset, default_collate
 from chemtools.tools.featurizer import MolFeaturizer
 import torch
 
@@ -55,12 +55,9 @@ class MolDataset(Dataset):
         return x, target
 
 
-class DataLoaders:
-    def __init__(self, dataloaders: List[DataLoader]):
-        if len(dataloaders) == 3:
-            self.train_dl, self.valid_dl, self.test_dl = dataloaders
-        elif len(dataloaders) == 2:
-            self.train_dl, self.test_dl = dataloaders
+class MolDataLoaders:
+    def __init__(self, *dataloaders: List[DataLoader]):
+        self.train_dl, self.valid_dl = dataloaders
 
 
 class MolDataLoader(DataLoader):
@@ -73,29 +70,19 @@ class MolDataLoader(DataLoader):
                  drop_last: bool = True):
 
         if collate_fn is None:
-            raise ValueError('The collate function is invalid. Please pass a valid function.')
+            collate_fn = default_collate
 
         train_shuffle = shuffle
         valid_shuffle = not train_shuffle
         dls = []
 
-        if len(datasets) == 2:
+        train_dl = DataLoader(datasets[0], batch_size=batch_size, shuffle=train_shuffle, collate_fn=collate_fn,
+                              drop_last=drop_last)
+        valid_dl = DataLoader(datasets[1], batch_size=batch_size, shuffle=valid_shuffle, collate_fn=collate_fn,
+                             drop_last=drop_last)
+        dls.extend([train_dl, valid_dl])
 
-            train_dl = DataLoader(datasets[0], batch_size=batch_size, shuffle=train_shuffle, collate_fn=collate_fn,
-                                  drop_last=drop_last)
-            test_dl = DataLoader(datasets[1], batch_size=batch_size, shuffle=valid_shuffle, collate_fn=collate_fn,
-                                 drop_last=drop_last)
-            dls.extend([train_dl, test_dl])
 
-        elif len(datasets) == 3:
-            train_dl = DataLoader(datasets[0], batch_size=batch_size, shuffle=train_shuffle, collate_fn=collate_fn,
-                                  drop_last=True)
-            valid_dl = DataLoader(datasets[1], batch_size=batch_size, shuffle=valid_shuffle, collate_fn=collate_fn,
-                                  drop_last=drop_last)
-            test_dl = DataLoader(datasets[2], batch_size=batch_size, shuffle=valid_shuffle, collate_fn=collate_fn,
-                                 drop_last=drop_last)
-            dls.extend([train_dl, valid_dl, test_dl])
-
-        dls = DataLoaders(dls)
+        dls = MolDataLoaders(dls)
 
         return dls
