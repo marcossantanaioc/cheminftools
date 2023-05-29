@@ -463,9 +463,3 @@ class MolCleaner:
 
         return cls.from_df(df, smiles_column=smiles_column, output_column=output_column, chunk_size=chunk_size,
                            n_workers=n_workers, pause=pause)
-
-# if __name__ == '__main__':
-#     test_data = pd.read_csv('/home/marcossantana/DL/data/Lipophilicity.csv')
-#
-#     out = MolCleaner.from_df(test_data, smiles_column='smiles', n_workers=3, pause=0, chunk_size=100)
-#     print(out[['smiles', 'RDKIT_SMILES']].head())
