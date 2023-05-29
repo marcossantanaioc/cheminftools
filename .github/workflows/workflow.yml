@@ -10,3 +10,4 @@ jobs:
           echo "Installing chemtools"
           python -m pip install --upgrade pip
           python -m pip install flake8
+          pip install -e .
