@@ -1,7 +1,7 @@
-from typing import Dict, Tuple, List
+from typing import Dict, Tuple
+import torch
 from torch.utils.data import DataLoader, Dataset, default_collate
 from chemtools.tools.featurizer import MolFeaturizer
-import torch
 
 __all__ = ['MolDataset', 'MolDataLoader', 'MolDataLoaders']
 
@@ -56,7 +56,7 @@ class MolDataset(Dataset):
 
 
 class MolDataLoaders:
-    def __init__(self, *dataloaders: List[DataLoader]):
+    def __init__(self, *dataloaders: DataLoader):
         self.train_dl, self.valid_dl = dataloaders
 
 
@@ -74,17 +74,17 @@ class MolDataLoader:
         self.collate_fn = default_collate if collate_fn is None else collate_fn
         self.drop_last = drop_last
 
-    def __call__(self):
+    def dataloaders(self):
         train_shuffle = self.shuffle
         valid_shuffle = not train_shuffle
 
-        self.train_dl = DataLoader(self.datasets[0], batch_size=self.batch_size, shuffle=train_shuffle,
-                                   collate_fn=self.collate_fn,
-                                   drop_last=self.drop_last)
-        self.valid_dl = DataLoader(self.datasets[1], batch_size=self.batch_size * 2, shuffle=valid_shuffle,
-                                   collate_fn=self.collate_fn,
-                                   drop_last=self.drop_last)
+        train_dl = DataLoader(self.datasets[0], batch_size=self.batch_size, shuffle=train_shuffle,
+                              collate_fn=self.collate_fn,
+                              drop_last=self.drop_last)
+        valid_dl = DataLoader(self.datasets[1], batch_size=self.batch_size * 2, shuffle=valid_shuffle,
+                              collate_fn=self.collate_fn,
+                              drop_last=self.drop_last)
 
-        self.dls = MolDataLoaders([self.train_dl, self.valid_dl])
+        dls = MolDataLoaders(train_dl, valid_dl)
 
-        return self.dls
+        return dls
