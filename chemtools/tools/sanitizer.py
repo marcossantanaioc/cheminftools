@@ -1,8 +1,8 @@
 __all__ = ['mol_to_inchi', 'add_nitrogen_charges',
            'remove_unwanted', 'normalize_mol', 'get_stereo_info',
-           'process_stereo_duplicates', 'MolCleaner']
+           'process_duplicates', 'MolCleaner']
 
-from typing import List
+from typing import List, Union
 import numpy as np
 import pandas as pd
 from rdkit import Chem
@@ -25,7 +25,24 @@ _allowed_atoms = [Atom(i) for i in
                    79, 80, 81, 82, 83, 84, 87, 88]]
 
 
-def get_stereo_info(mol):
+def get_stereo_info(mol: Union[Chem.Mol, str]):
+    """
+    Return the stereo information on a given molecule.
+    Stereo information includes CIS/TRANS, E/Z, R/S isomerism info
+    for each bond in a molecule.
+
+    Parameters
+    ----------
+    mol
+        A rdkit.Chem.Mol object or a SMILES string
+
+    Returns
+    -------
+    stereo_info
+        A string representing the stereo info found
+        in each bond of ´mol´.
+    """
+
     bonds = {Chem.BondStereo.STEREONONE: 0,
              Chem.BondStereo.STEREOANY: 1,
              Chem.BondStereo.STEREOZ: 2,
@@ -65,15 +82,35 @@ def get_stereo_info(mol):
 
 
 def mol_to_inchi(mol):
-    """Converts a rdchem.Mol object into InCHI keys"""
+    """
+    Converts a Chem.Mol object into InCHI keys
+
+    Parameters
+    ----------
+    mol
+        A rdkit.Chem.Mol object or a SMILES string
+    """
+
     mol = convert_smiles(mol, sanitize=True)
     inchi = Chem.MolToInchiKey(mol)
     return inchi
 
 
 def add_nitrogen_charges(mol):
-    """Fixes charge on nitrogen if its valence raises an Exception on RDKit
+    """
+    Fixes charge on nitrogen if its valence raises an Exception on RDKit
     See the discussion on: https://github.com/rdkit/rdkit/issues/3310
+
+    Parameters
+    ----------
+    mol
+        A rdkit.Chem.Mol object.
+
+    Returns
+    -------
+    mol
+        A sanitized version of ´mol´
+        with charges on nitrogen atoms corrected.
     """
 
     mol.UpdatePropertyCache(strict=False)
@@ -90,8 +127,26 @@ def add_nitrogen_charges(mol):
     return mol
 
 
-def remove_unwanted(mol, allowed_atoms=_allowed_atoms, use_druglike: bool = True):
-    """Remove molecules with unwanted elements (check the _unwanted definition) and isotopes"""
+def remove_unwanted(mol,
+                    allowed_atoms: List[Chem.Atom] = _allowed_atoms,
+                    use_druglike: bool = True):
+    """
+    Remove molecules with unwanted elements (check the _unwanted definition) and isotopes.
+
+    Parameters
+    ----------
+    mol
+        A Chem.Mol object.
+    allowed_atoms
+        A list of Chem.Atom objects representing atoms that are allowed.
+    use_druglike
+        Whether to use atoms usually found in drugs (halogens, H, C, N, O)
+
+    Returns
+    -------
+        A Chem.Mol object or None.
+
+    """
 
     if use_druglike:
         allowed_atoms = [Atom(i) for i in [1, 6, 7, 8, 9, 15, 16, 17, 35, 53]]
@@ -110,30 +165,30 @@ def remove_unwanted(mol, allowed_atoms=_allowed_atoms, use_druglike: bool = True
 def normalize_mol(mol):
     """
     Standardize a rdchem.Mol object.
-    
-    Arguments:
-    
-        mol : rdchem.Mol
-        
-    
-    Returns:
-        mol : rdchem.Mol
-            A standardized version of `mol`.
-            
+
     Steps:
-    
+
     1) Convert a SMILES to a rdchem.Mol object or return `mol` if it's already a rdchem.Mol
-    
+
     2) Kekulize, check valencies, set aromaticity, conjugation
      and hybridization, remove hydrogens,
      disconnect metal atoms, normalize the molecule and reionize it.
 
     3) Get parent fragment if multiple molecules (e.g. mixtures) are present
-    
+
     4) Neutralize parent molecule
     
+    Parameters
+    ----------
     
+        mol : Chem.Mol
+
+    Returns
+    -------
+        mol : Chem.Mol
+            A standardized version of `mol`.
     """
+
     mol = convert_smiles(mol, sanitize=False)
 
     # Correction of nitro groups
@@ -156,11 +211,58 @@ def normalize_mol(mol):
     return uncharged_parent_clean_mol
 
 
-def process_stereo_duplicates(data: pd.DataFrame,
-                              smiles_column: str,
-                              act_column: str,
-                              cols_to_check: List[str],
-                              keep: str = 'first'):
+def process_duplicates(data: pd.DataFrame,
+                       smiles_column: str,
+                       act_column: str,
+                       cols_to_check: List[str],
+                       keep: str = 'first'):
+
+    """
+    Aggregates duplicates in a dataset.
+    It is usually enough to look for duplicates by
+    grouping on standardized SMILES or InChiKeys.
+    However, in cases where there's a racemic mixture and
+    defined isomers present, the standard deduplication
+    procedure will return separate entries. When these
+    entries are used to compute chemical features, such as
+    Morgan fingerprints, MACCS  keys or 2D physicochemical descriptors,
+    they will share the same values (unless stereochemistry is taken into
+    consideration).
+    For cases like the above, one can use ´process_duplicates´ function
+    to merge and keep just one compound. This function looks for potential
+    duplicates in your SMILES by grouping on the SMILES column and other
+    relevant columns (´cols_to_check´).
+
+    Three kinds of duplicates will be treated:
+    to_keep: duplicates where the difference in ´act_column´ is larger
+    than 1. In case of activity values, it considers 1 log unit
+    to_merge: duplicates where the difference in ´act_column´ < 1.0
+    no_duplicates: compounds without a duplicate flag.
+
+    Parameters
+    ----------
+    data
+        Input DataFrame.
+    smiles_column
+        Name of column with SMILES.
+    act_column
+        Name of column with activity data.
+        It doesn't need to be activity - any
+        numberical value is ok.
+    cols_to_check
+        Relevant columns to use for aggregation.
+        See pandas groupby operation for detailed
+        explanation.
+    keep
+        Which compound to keep
+        first means the one with highest ´act_column´ value.
+        last will keep the one with lowest ´act_column´ value.
+
+    Returns
+    -------
+        Aggregated version of data.
+
+    """
     assert keep in ['first', 'last']
     data = data.copy()
 
@@ -226,6 +328,44 @@ def process_stereo_duplicates(data: pd.DataFrame,
 
 
 class MolCleaner:
+    """
+    Use one of the factory methods (´from_df´, ´from_csv´ or ´from_list´) instead of using directly.
+
+    1. Standardize unknown stereochemistry (Handled by the RDKit Mol file parser)
+        i) Fix wiggly bonds on sp3 carbons - sets atoms and bonds marked as unknown stereo to no stereo
+        ii) Fix wiggly bonds on double bonds – set double bond to crossed bond
+    2. Clears S Group data from the mol file
+    3. Kekulize the structure
+    4. Remove H atoms (See the page on explicit Hs for more details)
+    5. Normalization:
+        Fix hypervalent nitro groups
+        Fix KO to K+ O- and NaO to Na+ O- (Also add Li+ to this)
+        Correct amides with N=COH
+        Standardise sulphoxides to charge separated form
+        Standardize diazonium N (atom :2 here: [*:1]-[N;X2:2]#[N;X1:3]>>[*:1]) to N+
+        Ensure quaternary N is charged
+        Ensure trivalent O ([*:1]=[O;X2;v3;+0:2]-[#6:3]) is charged
+        Ensure trivalent S ([O:1]=[S;D2;+0:2]-[#6:3]) is charged
+        Ensure halogen with no neighbors ([F,Cl,Br,I;X0;+0:1]) is charged
+    6. The molecule is neutralized, if possible. See the page on neutralization rules for more details.
+    7. Remove stereo from tartrate to simplify salt matching
+    8. Normalise (straighten) triple bonds and allenes
+
+
+
+    The curation steps in ChEMBL structure pipeline were augmented with additional steps to identify duplicated entries
+    9. Find stereo centers
+    10. Generate inchi keys
+    11. Find duplicated SMILES. If the same SMILES is present multiple times, two outcomes are possible.
+        i. The same compound (e.g. same ID and same SMILES)
+        ii. Isomers with different SMILES, IDs and/or activities
+
+        In case i), the compounds are merged by taking the median values of all numeric columns in the dataframe.
+        For case ii), the compounds are further classified as 'to merge' or 'to keep' depending on the activity values.
+            a) Compounds are considered for mergining (to merge) if the difference in acvitities is less than 1log unit.
+            b) Compounds are considered for keeping as individual entries (to keep) if the difference in activities is larger than 1log unit. In this case, the user can
+            select which compound to keep - the one with highest or lowest activity.
+            """
 
     @classmethod
     def process_mol(cls, mol):
@@ -255,6 +395,24 @@ class MolCleaner:
 
         res = [cls.process_mol(smiles_list[i]) for i in idxs]
         return res
+
+    @classmethod
+    def from_list(cls,
+                  smiles_list: List[str],
+                  output_column: str = 'RDKIT_SMILES',
+                  chunk_size: int = 64,
+                  n_workers: int = 1,
+                  pause: int = 0):
+
+        df = pd.DataFrame({'ID': [f'mol_{x}' for x in range(len(smiles_list))],
+                           'SMILES': smiles_list})
+
+        return cls.from_df(df,
+                           smiles_column='SMILES',
+                           output_column=output_column,
+                           chunk_size=chunk_size,
+                           n_workers=n_workers,
+                           pause=pause)
 
     @classmethod
     def from_df(cls,
@@ -292,13 +450,22 @@ class MolCleaner:
 
         return data
 
-#
+    @classmethod
+    def from_csv(cls,
+                 csv_path: str,
+                 smiles_column: str,
+                 output_column: str = 'RDKIT_SMILES',
+                 chunk_size: int = 64,
+                 n_workers: int = 1,
+                 pause: int = 0):
+
+        df = pd.read_csv(csv_path)
+
+        return cls.from_df(df, smiles_column=smiles_column, output_column=output_column, chunk_size=chunk_size,
+                           n_workers=n_workers, pause=pause)
+
 # if __name__ == '__main__':
-#     data = pd.read_csv('/home/marcossantana/DL/data/Lipophilicity.csv')
+#     test_data = pd.read_csv('/home/marcossantana/DL/data/Lipophilicity.csv')
 #
-#     smiles_column = 'smiles'
-#     act_column = 'exp'
-#     # print(data.head())
-#
-#     res = MolCleaner.from_df(data, smiles_column=smiles_column, n_workers=3, pause=0, chunk_size=100)
-#     print(res[[smiles_column, 'RDKIT_SMILES']].head())
+#     out = MolCleaner.from_df(test_data, smiles_column='smiles', n_workers=3, pause=0, chunk_size=100)
+#     print(out[['smiles', 'RDKIT_SMILES']].head())
