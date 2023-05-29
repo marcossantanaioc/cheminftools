@@ -3,8 +3,13 @@ import torch
 from torch.utils.data import DataLoader, Dataset, default_collate
 from chemtools.tools.featurizer import MolFeaturizer
 
+
+
 __all__ = ['MolDataset', 'MolDataLoader', 'MolDataLoaders']
 
+DEVICE = 'cpu'
+if torch.cuda.is_available():
+    DEVICE = 'cuda'
 
 class MolDataset(Dataset):
     """
@@ -48,10 +53,10 @@ class MolDataset(Dataset):
         x, target
             A tuple of features and target variable
         """
-        target = torch.tensor(self.data[idx][1]).to(torch.float32).view(-1, 1)
+        target = torch.tensor(self.data[idx][1]).to(torch.float32).view(-1, 1).to(DEVICE)
         smi = self.data[idx][0]
 
-        x = torch.from_numpy(self.featurizer.transform_one(smi)).to(torch.float32).squeeze()
+        x = torch.from_numpy(self.featurizer.transform_one(smi)).to(torch.float32).squeeze().to(DEVICE)
         return x, target
 
 
@@ -67,7 +72,7 @@ class MolDataLoader:
                  batch_size: int = 32,
                  shuffle: bool = True,
                  collate_fn=None,
-                 drop_last: bool = True):
+                 drop_last: bool = True, device: ''):
         self.datasets = datasets
         self.batch_size = batch_size
         self.shuffle = shuffle
