@@ -5,7 +5,6 @@ jobs:
     runs-on: ubuntu-latest # Defines the runner that will run the job.
     steps: # Steps in the job
       - name: print greeting
-        run:
-          - echo "Damn"
+        run: echo "Hello world"
 
 
