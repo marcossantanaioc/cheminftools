@@ -11,7 +11,9 @@ from tqdm import tqdm
 
 
 class MolFeaturizer:
-    """Creates a Fingerprinter to perform molecular featurization
+    """
+    Creates a featurizer object to perform molecular transformations
+    on SMILES.
 
     Attributes
     ----------
