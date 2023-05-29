@@ -3,7 +3,7 @@ from torch.utils.data import DataLoader, Dataset, default_collate
 from chemtools.tools.featurizer import MolFeaturizer
 import torch
 
-__all__ = ['MolDataset', 'MolDataLoader', 'DataLoaders']
+__all__ = ['MolDataset', 'MolDataLoader', 'MolDataLoaders']
 
 
 class MolDataset(Dataset):
@@ -60,29 +60,34 @@ class MolDataLoaders:
         self.train_dl, self.valid_dl = dataloaders
 
 
-class MolDataLoader(DataLoader):
+class MolDataLoader:
 
-    def __call__(self,
+    def __init__(self,
                  datasets: Tuple[MolDataset],
                  batch_size: int = 32,
                  shuffle: bool = True,
                  collate_fn=None,
                  drop_last: bool = True):
+        self.datasets = datasets
+        self.batch_size = batch_size
+        self.shuffle = shuffle
+        self.collate_fn = default_collate if collate_fn is None else collate_fn
+        self.drop_last = drop_last
 
-        if collate_fn is None:
-            collate_fn = default_collate
-
-        train_shuffle = shuffle
+    def __call__(self):
+        train_shuffle = self.shuffle
         valid_shuffle = not train_shuffle
         dls = []
 
-        train_dl = DataLoader(datasets[0], batch_size=batch_size, shuffle=train_shuffle, collate_fn=collate_fn,
-                              drop_last=drop_last)
-        valid_dl = DataLoader(datasets[1], batch_size=batch_size, shuffle=valid_shuffle, collate_fn=collate_fn,
-                             drop_last=drop_last)
-        dls.extend([train_dl, valid_dl])
+        self.train_dl = DataLoader(self.datasets[0], batch_size=self.batch_size, shuffle=train_shuffle,
+                                   collate_fn=self.collate_fn,
+                                   drop_last=self.drop_last)
+        self.valid_dl = DataLoader(self.datasets[1], batch_size=self.batch_size * 2, shuffle=valid_shuffle,
+                                   collate_fn=self.collate_fn,
+                                   drop_last=self.drop_last)
 
+        dls.extend([self.train_dl, self.valid_dl])
 
-        dls = MolDataLoaders(dls)
+        self.dls = MolDataLoaders(dls)
 
-        return dls
+        return self.dls
