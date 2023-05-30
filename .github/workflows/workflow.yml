@@ -53,20 +53,5 @@ jobs:
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
       with:
-        version: 0.1
         user: marcossantana
         password: ${{ secrets.pip_token }}
-
-
-            
-        
-
-#      - name: store artifacts
-#      - uses: actions/upload-artifact@v3
-#        with:
-#          name: chemtools-artifact
-#          path: pwd
-#      - name: flake8
-#        run: |
-#            pwd
-#
