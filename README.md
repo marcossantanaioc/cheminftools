@@ -30,9 +30,9 @@ A dataset of molecules can be standardize in just 1 line of code!
 ``` python
 import pandas as pd
 import numpy as np
-from chemtools.tools.sanitizer import MolCleaner
-from chemtools.tools.featurizer import MolFeaturizer
-from chemtools.tools.filtering import MolFiltering
+from cheminftools.tools.sanitizer import MolCleaner
+from cheminftools.tools.featurizer import MolFeaturizer
+from cheminftools.tools.filtering import MolFilter
 from rdkit import Chem
 import json
 ```
@@ -103,7 +103,7 @@ processed_data = MolCleaner.from_df(data, smiles_col='smiles', act_col='pIC50', 
 # Filtering
 
 The
-[`MolFiltering`](https://marcossantanaioc.github.io/chemtools/filtering.html#molfiltering)
+`MolFilter`
 class is responsible for removing compounds that match defined
 substructural alerts, including PAINS and rules defined by different
 organizations, such as GSK and University of Dundee.
@@ -115,7 +115,7 @@ with open('../data/libraries/Glaxo_alerts.json') as f:
 ```
 
 ``` python
-alerts_data = MolFiltering.from_df(processed_data, smiles_col='processed_smiles', alerts_dict=alerts_dict)
+alerts_data = MolFilter.from_df(df=processed_data, smiles_column='processed_smiles', catalog=)
 ```
 
     +----------------------------------------------------------------------------+-----------------------+---------------------------+------------------+------------------+
