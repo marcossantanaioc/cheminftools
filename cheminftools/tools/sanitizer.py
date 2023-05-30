@@ -9,7 +9,7 @@ from rdkit import Chem
 from rdkit import RDLogger
 from rdkit.Chem.MolStandardize import rdMolStandardize
 from rdkit.Chem.rdchem import Atom
-from chemtools.utils import MolBatcher, convert_smiles, get_delta_act
+from cheminftools.utils import MolBatcher, convert_smiles, get_delta_act
 from tqdm import tqdm
 import logging
 
@@ -360,12 +360,13 @@ class MolCleaner:
         i. The same compound (e.g. same ID and same SMILES)
         ii. Isomers with different SMILES, IDs and/or activities
 
-        In case i), the compounds are merged by taking the median values of all numeric columns in the dataframe.
-        For case ii), the compounds are further classified as 'to merge' or 'to keep' depending on the activity values.
-            a) Compounds are considered for mergining (to merge) if the difference in acvitities is less than 1log unit.
-            b) Compounds are considered for keeping as individual entries (to keep) if the difference in activities is larger than 1log unit. In this case, the user can
-            select which compound to keep - the one with highest or lowest activity.
-            """
+        In case i), the compounds are merged by taking the median values of all numeric columns in the dataframe. For
+        case ii), the compounds are further classified as 'to merge' or 'to keep' depending on the activity values.
+        a) Compounds are considered for mergining (to merge) if the difference in acvitities is less than 1log unit.
+        b) Compounds are considered for keeping as individual entries (to keep) if the difference in activities is
+        larger than 1log unit. In this case, the user can select which compound to keep - the one with highest or
+        lowest activity.
+    """
 
     @classmethod
     def process_mol(cls, mol):

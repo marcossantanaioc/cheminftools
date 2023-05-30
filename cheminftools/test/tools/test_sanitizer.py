@@ -1,5 +1,5 @@
 import unittest
-from chemtools.tools.sanitizer import MolCleaner, normalize_mol, get_stereo_info, get_delta_act, mol_to_inchi
+from cheminftools.tools.sanitizer import MolCleaner, normalize_mol, get_stereo_info, get_delta_act, mol_to_inchi
 import pandas as pd
 from rdkit import Chem
 

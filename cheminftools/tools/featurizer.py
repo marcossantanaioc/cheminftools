@@ -3,7 +3,7 @@ __all__ = ['MolFeaturizer']
 import numpy as np
 from rdkit import Chem
 from ctypes import ArgumentError
-from chemtools.utils import convert_smiles
+from cheminftools.utils import convert_smiles
 from rdkit.Chem import MACCSkeys, rdFingerprintGenerator, Descriptors
 from rdkit.DataStructs.cDataStructs import ConvertToNumpyArray
 from functools import partial
