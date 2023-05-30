@@ -1,5 +1,5 @@
 name: pipeline # Name of the workflow
-on: [push, release] # Trigger - Make sure we can activate workflow manually.
+on: [push, release, workflow_dispatch] # Trigger - Make sure we can activate workflow manually.
 
 permissions:
   contents: read
@@ -53,6 +53,7 @@ jobs:
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
       with:
+        version: 0.1
         user: marcossantana
         password: ${{ secrets.pip_token }}
 
