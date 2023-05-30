@@ -2,6 +2,7 @@ _docs/
 
 *.bak
 data/
+notebooks/
 .gitattributes
 .last_checked
 .gitconfig
