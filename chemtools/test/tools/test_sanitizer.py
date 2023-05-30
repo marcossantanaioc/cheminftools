@@ -5,6 +5,7 @@ from rdkit import Chem
 
 
 class Tets(unittest.TestCase):
+    """Unittests"""
 
     def test_get_stereo_inf(self):
         smi = 'O=C1OC(CN1c1ccc(cc1)N1CCOCC1=O)CNC(=O)c1ccc(s1)Cl'
