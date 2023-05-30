@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest # Defines the runner that will run the job.
     timeout-minutes: 5
     steps: # Steps in the job
-      #- uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
         with:
           python-version: '3.x'
