@@ -80,17 +80,3 @@ class MolBatcher:
                                    smiles_list=self.smiles_list,
                                    **self.kwargs),
                             total=len(chunks))
-
-#
-# def return_one(smi):
-#     return smi + 'CCC'
-#
-# def return_same(idxs, smiles_list):
-#     res = [return_one(smiles_list[i]) for i in idxs]
-#     return res
-#
-#
-# smiles_list = ['CCCC', 'CO']
-#
-# batcher = MolBatcher(func=return_same, smiles_list=smiles_list, chunk_size=2, n_workers=1, pause=0)
-# print(list(batcher))
