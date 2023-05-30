@@ -9,16 +9,16 @@ jobs:
     runs-on: ubuntu-latest # Defines the runner that will run the job.
     timeout-minutes: 5
     steps: # Steps in the job
+      - uses: actions/setup-python@v4
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
         with:
           python-version: '3.x'
-      - name: install
+      - name: Install
         run: |
           echo "Installing chemtools"
           python -m pip install --upgrade pip
           python setup.py install
-      - name: 'Upload Artifact'
+      - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
           name: chemtools_artifact
