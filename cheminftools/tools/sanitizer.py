@@ -3,6 +3,7 @@ __all__ = ['mol_to_inchi', 'add_nitrogen_charges',
            'process_duplicates', 'MolCleaner']
 
 from typing import List, Union
+import re
 import numpy as np
 import pandas as pd
 from rdkit import Chem
@@ -23,6 +24,28 @@ _allowed_atoms = [Atom(i) for i in
                   [1, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 15, 16, 17, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
                    35, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 53, 55, 56, 72, 73, 74, 75, 76, 77, 78,
                    79, 80, 81, 82, 83, 84, 87, 88]]
+
+
+def check_stereo(smi):
+    """
+    Check if a SMILES
+    has any stereo marks
+    such as @ or double bonds.
+    Parameters
+    ----------
+    smi
+        a SMILES string
+    Returns
+    -------
+        a boolean indicating whether `smi` has or not stereo marks.
+    """
+    smi = str(smi)
+    double_bond_patt = r'[\\\/]'
+    r_s_patt = '@'
+
+    patt = re.compile('|'.join([double_bond_patt, r_s_patt]))
+    out = bool(re.search(patt, smi))
+    return out
 
 
 def get_stereo_info(mol: Union[Chem.Mol, str]):
@@ -216,7 +239,6 @@ def process_duplicates(data: pd.DataFrame,
                        act_column: str,
                        cols_to_check: List[str],
                        keep: str = 'first'):
-
     """
     Aggregates duplicates in a dataset.
     It is usually enough to look for duplicates by
@@ -268,10 +290,20 @@ def process_duplicates(data: pd.DataFrame,
 
     # Generate inchikeys and stereo info
     logger.info(f'Converting {smiles_column} into inchikeys.')
-    data['inchikey'] = data[smiles_column].progress_apply(mol_to_inchi)
+    data['smiles_no_isomeric'] = data[smiles_column].progress_apply(
+        lambda x: Chem.MolToSmiles(Chem.MolFromSmiles(x), isomericSmiles=False))
+    data['inchikey'] = data['smiles_no_isomeric'].progress_apply(mol_to_inchi)
     data['Stereo'] = data[smiles_column].progress_apply(lambda x: get_stereo_info(x))
 
-    c = [smiles_column] + cols_to_check
+    # Remove SMILES without stereo information IF a similar SMILES has stereo info
+    # This is the case when unspecified and isolated isomers are present in the dataset
+
+    data['has_stereo_mark'] = data[smiles_column].apply(check_stereo)  # Find
+    data['group_size'] = data.groupby('inchikey')[smiles_column].transform('count')
+    data = data.drop(data[(data['has_stereo_mark'] == False) & (data['group_size'] > 1)].index)
+    data.reset_index(drop=True, inplace=True)
+
+    c = ['inchikey'] + cols_to_check
 
     # Get potential duplicates
     data['duplicated'] = data.groupby(c)[act_column].transform(get_delta_act)
@@ -299,11 +331,10 @@ def process_duplicates(data: pd.DataFrame,
     if not to_merge.empty:
         logger.info(f'Merging potential duplicates - '
                     f'This is usually caused by isomers with undefined chiral centers or E/Z information on SMILES.')
-
-        merged = to_merge.groupby(c).agg({'inchikey': lambda x: x[0],
-                                          'Stereo': lambda x: x[0],
-                                          act_column: 'median',
-                                          'duplicated': lambda x: x[0]})
+        cols = to_merge.columns
+        aggs = {c: lambda x: x[0] for c in cols}  # Aggregate and get first entry on each group.
+        aggs[act_column] = 'median'  # Take median of activity column.
+        merged = to_merge.groupby(c).agg(aggs)
 
         logger.info(f'Number of duplicates merged: {len(merged)} out of {len(to_merge)}.')
         results.append(merged)
@@ -312,14 +343,19 @@ def process_duplicates(data: pd.DataFrame,
         logger.info(f'Check which duplicates should be kept -'
                     f' This usually happens with isomers with very different activities.')
 
-        duplis_kept = to_keep.groupby(smiles_column, group_keys=False).apply(
+        duplis_kept = to_keep.groupby('inchikey', group_keys=False).apply(
             lambda x: x.loc[x[act_column].idxmax()]).copy().reset_index(drop=True)
+        duplis_kept.reset_index(drop=True, inplace=True)
+        results.append(duplis_kept)
+
+    elif not to_keep.empty and keep == 'last':
+        duplis_kept = to_keep.groupby('inchikey', group_keys=False).apply(
+            lambda x: x.loc[x[act_column].idxmin()]).copy().reset_index(drop=True)
 
         duplis_kept.reset_index(drop=True, inplace=True)
         results.append(duplis_kept)
 
     # Recombine data
-
     recombined_data = pd.concat([no_duplicates, *results], axis=0, ignore_index=True)
     logger.info(f'Duplicates removal reduced the number of rows from {len(data)} to {len(recombined_data)}')
     recombined_data.reset_index(drop=True, inplace=True)
