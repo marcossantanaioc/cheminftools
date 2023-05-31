@@ -1,4 +1,3 @@
-import pytest
 from cheminftools.tools.sanitizer import MolCleaner, normalize_mol, get_stereo_info, get_delta_act, mol_to_inchi, \
     process_duplicates, check_stereo
 import pandas as pd
