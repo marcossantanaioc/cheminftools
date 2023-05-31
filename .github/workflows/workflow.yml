@@ -1,5 +1,5 @@
 name: pipeline
-on: [push, release, workflow_dispatch] # Trigger - Make sure we can activate workflow manually.
+on: [workflow_dispatch] # Trigger - Make sure we can activate workflow manually.
 
 permissions:
   contents: read

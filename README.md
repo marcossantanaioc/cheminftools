@@ -21,11 +21,11 @@ Currently supported tasks include:
 
     2 - Calculation of molecular descriptors
 
-    3 - Filtering datasets using predefined alerts (e.g. PAINS, Dundee, Glaxo, etc.)
+    3 - Filtering datasets your own or predefined alerts (e.g. PAINS, Dundee, Glaxo, etc.)
 
 # Standardization
 
-A dataset of molecules can be standardize in just 1 line of code!
+A dataset of molecules can be standardized in just 1 line of code!
 
 ``` python
 import pandas as pd
@@ -43,9 +43,7 @@ data = pd.read_csv('../data/example_data.csv')
 
 # Sanitizing
 
-The
-[`MolCleaner`](https://marcossantanaioc.github.io/cheminftools/sanitizer.html#molcleaner)
-class performs sanitization tasks, including:
+The `MolCleaner` class performs sanitization tasks, including:
 
         1. Standardize unknown stereochemistry (Handled by the RDKit Mol file parser)
             i) Fix wiggly bonds on sp3 carbons - sets atoms and bonds marked as unknown stereo to no stereo
@@ -105,67 +103,48 @@ processed_data = MolCleaner.from_df(data, smiles_col='smiles', act_col='pIC50', 
 The
 `MolFilter`
 class is responsible for removing compounds that match defined
-substructural alerts, including PAINS and rules defined by different
-organizations, such as GSK and University of Dundee.
+substructural alerts. The class `AlertMatcher` can be used to generate your own catalog of alerts
+based on a dictionary. You can also use catalogs from RDKIT, such as [PAINS catalog](http://rdkit.org/docs/source/rdkit.Chem.rdfiltercatalog.html).
 
+The example below shows how to create an alerts catalog starting from a json of the Glaxos alerts.
+### Load json and prepare dictionary
 ``` python
-with open('../data/libraries/Glaxo_alerts.json') as f:
-    alerts_dict = json.load(f)['structural_alerts']
-    structural_alerts = alerts_dict.get('structural_alerts', None)
+alerts_df = pd.read_csv('../data/libraries/alert_collection.csv')
+alerts_df = alerts_df[alerts_df['rule_set_name']=='Glaxo']
+alerts_df.rename(columns={'smarts':'SMARTS'},inplace=True)
+alerts_df_reindex = alerts_df[['description','SMARTS','rule_set_name','priority','max_matches']].set_index('description')
+alerts_dict = alerts_df_reindex.to_dict(orient='index')
+
+```
+### Create matcher object from dict
+``` python
+matcher = AlertMatcher(alerts_dict)
+catalog = matcher.create_matcher()
+```
+### Run filtering
+``` python
+alerts_data = MolFilter.from_df(df=processed_data, smiles_column='processed_smiles', catalog=catalog)
 ```
 
-``` python
-alerts_data = MolFilter.from_df(df=processed_data, smiles_column='processed_smiles', catalog=)
-```
+    +----------------------------------------------------------------------------+-----------------------+---------------------------+------------------+
+    |                                  smiles                                    |         SMARTS        |          alert_name       |   rule_set_name  |
+    +============================================================================+=======================+===========================+==================+
+    |        Cc1ncc([N+](=O)[O-])n1C/C(=N/NC(=O)c1ccc(O)cc1)c1ccc(Br)cc1         |   [N;R0][N;R0]C(=O)   |     R17 acylhydrazide     |      Glaxo       |
+    +----------------------------------------------------------------------------+-----------------------+---------------------------+------------------+
+    |               O=NN(CCCl)C(=O)Nc1ccc2ncnc(Nc3cccc(Cl)c3)c2c1                | [Br,Cl,I][CX4;CH,CH2] | R1 Reactive alkyl halides |      Glaxo       |
+    +----------------------------------------------------------------------------+-----------------------+---------------------------+------------------+
+    |               O=NN(CCCl)C(=O)Nc1ccc2ncnc(Nc3cccc(Cl)c3)c2c1                |   [N;R0][N;R0]C(=O)   |     R17 acylhydrazide     |      Glaxo       |
+    +----------------------------------------------------------------------------+-----------------------+---------------------------+------------------+
+    |               O=NN(CCCl)C(=O)Nc1ccc2ncnc(Nc3cccc(Cl)c3)c2c1                |      [N&D2](=O)       |        R21 Nitroso        |      Glaxo       |
+    +----------------------------------------------------------------------------+-----------------------+---------------------------+------------------+
+    | CS(=O)(=O)O[C@H]1CN[C@H](C#Cc2cc3ncnc(Nc4ccc(OCc5cccc(F)c5)c(Cl)c4)c3s2)C1 |   COS(=O)(=O)[C,c]    |      R5 Sulphonates       |      Glaxo       |
+    +----------------------------------------------------------------------------+-----------------------+---------------------------+------------------+
 
-    +----------------------------------------------------------------------------+-----------------------+---------------------------+------------------+------------------+
-    |                                  _smiles                                   |     Alert_SMARTS      |     Alert_description     |  Alert_rule_set  |   Alert_num_hits |
-    +============================================================================+=======================+===========================+==================+==================+
-    |        Cc1ncc([N+](=O)[O-])n1C/C(=N/NC(=O)c1ccc(O)cc1)c1ccc(Br)cc1         |   [N;R0][N;R0]C(=O)   |     R17 acylhydrazide     |      Glaxo       |                1 |
-    +----------------------------------------------------------------------------+-----------------------+---------------------------+------------------+------------------+
-    |               O=NN(CCCl)C(=O)Nc1ccc2ncnc(Nc3cccc(Cl)c3)c2c1                | [Br,Cl,I][CX4;CH,CH2] | R1 Reactive alkyl halides |      Glaxo       |                1 |
-    +----------------------------------------------------------------------------+-----------------------+---------------------------+------------------+------------------+
-    |               O=NN(CCCl)C(=O)Nc1ccc2ncnc(Nc3cccc(Cl)c3)c2c1                |   [N;R0][N;R0]C(=O)   |     R17 acylhydrazide     |      Glaxo       |                1 |
-    +----------------------------------------------------------------------------+-----------------------+---------------------------+------------------+------------------+
-    |               O=NN(CCCl)C(=O)Nc1ccc2ncnc(Nc3cccc(Cl)c3)c2c1                |      [N&D2](=O)       |        R21 Nitroso        |      Glaxo       |                1 |
-    +----------------------------------------------------------------------------+-----------------------+---------------------------+------------------+------------------+
-    | CS(=O)(=O)O[C@H]1CN[C@H](C#Cc2cc3ncnc(Nc4ccc(OCc5cccc(F)c5)c(Cl)c4)c3s2)C1 |   COS(=O)(=O)[C,c]    |      R5 Sulphonates       |      Glaxo       |                1 |
-    +----------------------------------------------------------------------------+-----------------------+---------------------------+------------------+------------------+
-
-#### Quinone
-
-``` python
-mol = Chem.MolFromSmiles('COC1/C=C\OC2(C)Oc3c(C)c(O)c4c(c3C2=O)C(=O)C=C(NC(=O)/C(C)=C\C=C/C(C)C(O)C(C)C(O)C(C)C(OC(C)=O)C1C)C4=O')
-mol.GetSubstructMatches(Chem.MolFromSmarts('O=C1[#6]~[#6]C(=O)[#6]~[#6]1'))
-mol
-```
-
-![](index_files/figure-commonmark/cell-10-output-1.png)
-
-#### Cynamide
-
-``` python
-mol1 = Chem.MolFromSmiles('Cc1cccc(C[C@H](NC(=O)c2cc(C(C)(C)C)nn2C)C(=O)NCC#N)c1')
-mol1.GetSubstructMatches(Chem.MolFromSmarts('N[CH2]C#N'))
-mol1
-```
-
-![](index_files/figure-commonmark/cell-11-output-1.png)
-
-#### R18 Quaternary C, Cl, I, P or S
-
-``` python
-mol = Chem.MolFromSmiles('CC[C@H](NC(=O)c1c([S+](C)[O-])c(-c2ccccc2)nc2ccccc12)c1ccccc1')
-mol.GetSubstructMatches(Chem.MolFromSmarts('[C+,Cl+,I+,P+,S+]'))
-mol
-```
-
-![](index_files/figure-commonmark/cell-12-output-1.png)
 
 # Featurization
 
 The
-[`MolFeaturizer`](https://marcossantanaioc.github.io/chemtools/featurizer.html#molfeaturizer)
+`MolFeaturizer`
 class converts SMILES into molecular descriptors. The current version
 supports Morgan fingerprints, Atom Pairs, Torsion Fingerprints, RDKit
 fingerprints and 200 constitutional descriptors, and MACCS keys.
@@ -175,9 +154,15 @@ fingerprinter = MolFeaturizer('rdkit2d')
 ```
 
 ``` python
-X = fingerprinter.process_smiles_list(processed_data['processed_smiles'].values)
+X = fingerprinter.transform(processed_data['processed_smiles'])
 ```
 
 ``` python
-X[0:5,0:5]
+X[:5, :5]
+array([[0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0]], dtype=uint8)
+
 ```
