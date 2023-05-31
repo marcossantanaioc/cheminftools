@@ -5,6 +5,7 @@ from rdkit import Chem
 from ctypes import ArgumentError
 from cheminftools.utils import convert_smiles
 from rdkit.Chem import MACCSkeys, rdFingerprintGenerator, Descriptors
+from rdkit.Chem.rdReducedGraphs import GetErGFingerprint
 from rdkit.DataStructs.cDataStructs import ConvertToNumpyArray
 from functools import partial
 from typing import List
@@ -38,7 +39,8 @@ class MolFeaturizer:
                       'rdkit': rdFingerprintGenerator.GetRDKitFPGenerator,
                       'rdkit2d': self.get_rdkit2d_descriptors,
                       'torsion': rdFingerprintGenerator.GetTopologicalTorsionGenerator,
-                      'maccs': MACCSkeys.GenMACCSKeys}
+                      'maccs': MACCSkeys.GenMACCSKeys,
+                      'erg': GetErGFingerprint}
 
         self.RDKIT_PROPERTIES = ['BalabanJ', 'BertzCT', 'Chi0', 'Chi0n', 'Chi0v', 'Chi1', 'Chi1n',
                                  'Chi1v', 'Chi2n', 'Chi2v', 'Chi3n', 'Chi3v', 'Chi4n', 'Chi4v',
@@ -108,6 +110,9 @@ class MolFeaturizer:
         if not mol:
             return None
 
+        if self.descriptor_type == 'erg':
+            return self.generator(mol)
+
         if self.descriptor_type == 'maccs':
             fps = np.array([])
             ConvertToNumpyArray(self.generator(mol), fps)
@@ -117,7 +122,6 @@ class MolFeaturizer:
             return self.generator(mol)
 
         else:
-
             if use_counts:
                 fps = self.generator.GetCountFingerprintAsNumPy(mol)
                 return fps.reshape(1, -1)
