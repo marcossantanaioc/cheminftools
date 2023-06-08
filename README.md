@@ -166,3 +166,33 @@ array([[0, 0, 0, 0, 0],
        [0, 0, 0, 0, 0]], dtype=uint8)
 
 ```
+# Collecting data from ChEMBL
+The current version of cheminftools support queries to ChEMBL based on UNIPROT accession codes.
+It should be straightforward to get activity data for multiple targets using the `ChemblFetcher` class.
+Users can find the latest version (and also older ones) of ChEMBL on the official [page](https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/latest/).
+Installation instructions come together with each ChEMBL release.
+
+`ChbemlFetcher` expects a configuration file for the database. This file includes information such as
+the host, user, password and port to connect to the database. 
+An example is shown below:
+
+```markdown
+[postgresql]
+host = localhost
+database = customer
+user = postgres
+password = admindb
+port = 5432
+```
+
+```python
+from cheminftools.data.data_gather import ChemblFetcher
+
+target_uniprot = ['P00742', 'P50613']
+chembl = ChemblFetcher(database_config_filename='database.ini',  # Path to configuration file. You can find \an example in the cheminftools.data folder
+                       database_name='chembl',  # Name of database
+                       version='32')  # ChEMBL version to use
+df = chembl.query_target_uniprot(target_uniprot=target_uniprot)
+```
+The output is a pandas DataFrame with the desired activity types (e.g. IC50, Kd, Ki)
+for each target in `target_uniprot`.
