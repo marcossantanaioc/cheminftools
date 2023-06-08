@@ -3,30 +3,11 @@ import pandas as pd
 import psycopg2
 import logging
 import sys
-from configparser import ConfigParser
+from config import config
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout, datefmt='%Y/%m/%d')
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
-
-
-def config(filename='database.ini', section='postgresql'):
-    # create a parser
-    parser = ConfigParser()
-
-    # read config file
-    parser.read(filename)
-
-    # get section, default to postgresql
-    db = {}
-    if parser.has_section(section):
-        params = parser.items(section)
-        for param in params:
-            db[param[0]] = param[1]
-    else:
-        raise Exception('Section {0} not found in the {1} file'.format(section, filename))
-
-    return db
 
 
 class ChemblFetcher:
@@ -42,9 +23,11 @@ class ChemblFetcher:
         The latest version is 32.
     """
 
-    def __init__(self, version: str = '32'):
+    def __init__(self, database_config_filename: str = 'database.ini', database_name: str = 'chembl',
+                 version: str = '32'):
+        self.database_name = database_name
         self.version = version
-        self.params = config()
+        self.params = config(filename=database_config_filename)
 
     def get_connection(self):
         """
@@ -139,10 +122,3 @@ class ChemblFetcher:
             df = pd.read_sql(sql_query_string, con=conn)
         connection.close()
         return df
-
-
-if __name__ == '__main__':
-    target_uniprot = ['P00742', 'P50613']
-    chembl = ChemblFetcher()
-    df = chembl.query_target_uniprot(target_uniprot=target_uniprot)
-    print(df.head())
