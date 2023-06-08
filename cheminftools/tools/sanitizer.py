@@ -268,7 +268,7 @@ def process_duplicates(data: pd.DataFrame,
     smiles_column
         Name of column with SMILES.
     act_column
-        Name of column with activity data.
+        Name of column with activity examples.
         It doesn't need to be activity - any
         numberical value is ok.
     cols_to_check
@@ -282,7 +282,7 @@ def process_duplicates(data: pd.DataFrame,
 
     Returns
     -------
-        Aggregated version of data.
+        Aggregated version of examples.
 
     """
     assert keep in ['first', 'last']
@@ -355,7 +355,7 @@ def process_duplicates(data: pd.DataFrame,
         duplis_kept.reset_index(drop=True, inplace=True)
         results.append(duplis_kept)
 
-    # Recombine data
+    # Recombine examples
     recombined_data = pd.concat([no_duplicates, *results], axis=0, ignore_index=True)
     logger.info(f'Duplicates removal reduced the number of rows from {len(data)} to {len(recombined_data)}')
     recombined_data.reset_index(drop=True, inplace=True)
@@ -370,7 +370,7 @@ class MolCleaner:
     1. Standardize unknown stereochemistry (Handled by the RDKit Mol file parser)
         i) Fix wiggly bonds on sp3 carbons - sets atoms and bonds marked as unknown stereo to no stereo
         ii) Fix wiggly bonds on double bonds – set double bond to crossed bond
-    2. Clears S Group data from the mol file
+    2. Clears S Group examples from the mol file
     3. Kekulize the structure
     4. Remove H atoms (See the page on explicit Hs for more details)
     5. Normalization:

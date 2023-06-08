@@ -12,7 +12,7 @@ logger.addHandler(logging.NullHandler())
 
 class ChemblFetcher:
     """
-    Collects data from a ChEMBL database
+    Collects examples from a ChEMBL database
     The user must provide a valid instance from ChEMBL
     See https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/latest/
     for the latest relases.

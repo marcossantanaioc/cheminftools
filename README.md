@@ -189,7 +189,7 @@ port = 5432
 from cheminftools.data.data_gather import ChemblFetcher
 
 target_uniprot = ['P00742', 'P50613']
-chembl = ChemblFetcher(database_config_filename='database.ini',  # Path to configuration file. You can find \an example in the cheminftools.data folder
+chembl = ChemblFetcher(database_config_filename='database.ini',  # Path to configuration file. You can find \an example in the cheminftools.examples folder
                        database_name='chembl',  # Name of database
                        version='32')  # ChEMBL version to use
 df = chembl.query_target_uniprot(target_uniprot=target_uniprot)
