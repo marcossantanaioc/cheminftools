@@ -1,7 +1,8 @@
 _docs/
 
 *.bak
-data/
+examples/
+database.ini
 notebooks/
 .gitattributes
 .last_checked
