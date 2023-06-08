@@ -1,10 +1,12 @@
-from typing import Dict, Any, List
 import logging
-import pandas as pd
-from rdkit import Chem
 import sys
+from typing import Dict, Any, List
+
+import pandas as pd
 from joblib import cpu_count
+from rdkit import Chem
 from rdkit.Chem import FilterCatalog
+
 from cheminftools.utils import MolBatcher
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout, datefmt='%Y/%m/%d')
@@ -94,7 +96,21 @@ class AlertMatcher:
         return catalog
 
 
-def get_alerts(smi: str, catalog: FilterCatalog.FilterCatalog) -> pd.DataFrame:
+def get_one_alert(smi: str, catalog: FilterCatalog.FilterCatalog) -> pd.DataFrame:
+    """
+    Finds alerts for one SMILES.
+
+    Parameters
+    ----------
+    smi
+        input SMILES.
+    catalog
+        a FilterCatalog object.
+    Returns
+    -------
+        Output DataFrame with alerts for `smi`.
+    """
+
     results = []
     info_names = [x.split('key=')[1] for x in catalog.GetEntryWithIdx(0).GetDescription().split('__') if 'key=' in x]
     mol = Chem.MolFromSmiles(smi)
@@ -116,6 +132,13 @@ def get_alerts(smi: str, catalog: FilterCatalog.FilterCatalog) -> pd.DataFrame:
     return results
 
 
+def get_alerts_from_smiles_list(idxs, smiles_list: List[str], catalog: FilterCatalog.FilterCatalog) -> pd.DataFrame:
+    res = [get_one_alert(smi=smiles_list[i], catalog=catalog) for i in idxs]
+    if len(res) == 1:
+        return res[0]
+    return pd.concat(res)
+
+
 class MolFilter:
     @classmethod
     def filter(cls, df: pd.DataFrame, conditions: Dict[str, Dict[str, Any]]) -> pd.DataFrame:
@@ -132,14 +155,14 @@ class MolFilter:
 
         logger.info('Processing SMILES.')
 
-        batcher = MolBatcher(get_alerts,
+        batcher = MolBatcher(get_alerts_from_smiles_list,
                              smiles_list=smiles_list,
                              catalog=catalog,
                              chunk_size=chunk_size,
                              n_workers=n_workers,
                              pause=pause)
 
-        all_alerts = pd.concat(batcher)
+        all_alerts = next(iter(batcher))
 
         if all_alerts.empty:
             pass
@@ -203,7 +226,6 @@ class MolFilter:
     @classmethod
     def from_list(cls, smiles_list: List[str],
                   catalog: FilterCatalog.FilterCatalog,
-                  smiles_column: str,
                   chunk_size: int = 64,
                   n_workers: int = 1,
                   pause: int = 0,
@@ -212,7 +234,7 @@ class MolFilter:
         df = pd.DataFrame({'SMILES': smiles_list, 'ID': list(range(len(smiles_list)))})
         return cls.from_df(df,
                            catalog=catalog,
-                           smiles_column=smiles_column,
+                           smiles_column='SMILES',
                            chunk_size=chunk_size,
                            n_workers=n_workers,
                            pause=pause,

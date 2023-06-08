@@ -1,4 +1,4 @@
-from cheminftools.tools.sanitizer import MolCleaner, normalize_mol, get_stereo_info, get_delta_act, mol_to_inchi, \
+from cheminftools.tools.sanitizer import MolCleaner, normalize_mol, get_stereo_info, mol_to_inchi, \
     process_duplicates, check_stereo
 import pandas as pd
 from rdkit import Chem
@@ -39,14 +39,6 @@ class TestsSanitizer:
         assert 'RDKIT_SMILES' in res.columns
         assert 'Stereo' in res.columns
         assert 'inchikey' in res.columns
-
-    def test_get_delta_act(self):
-        keep_acts = [1.5, 3.5]
-        merge_acts = [0.5, 0.2]
-        ok_acts = [0.5, 0.5]
-
-        deltas = [get_delta_act(x) for x in [ok_acts, merge_acts, keep_acts]]
-        assert deltas == ['Not duplicate', 'to_merge', 'to_keep']
 
     def test_normalize_mol(self):
         problematic_smi = 'C1=CC=CC=C1'
