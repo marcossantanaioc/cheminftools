@@ -12,7 +12,7 @@ if torch.cuda.is_available():
 
 class MolDataset(Dataset):
     """
-    Creates a dataset of chemical data
+    Creates a dataset of chemical examples
     Data should be passed as a list of tuples,
     where each element of the list is a tuple of
     SMILES and a target variable (e.g. ('c1ccccc1', 1.5))
@@ -46,7 +46,7 @@ class MolDataset(Dataset):
         Parameters
         ----------
         idx
-            The index of the element in ´self.data´ to return
+            The index of the element in ´self.examples´ to return
         Returns
         -------
         x, target
