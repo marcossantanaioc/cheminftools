@@ -3,8 +3,6 @@ on:
   workflow_dispatch:
     branches:
       - 'main'
-      - 'dev-*'
-
 
 permissions:
   contents: read
