@@ -1,6 +1,6 @@
 from rdkit.Chem import rdFingerprintGenerator
 import pytest
-from cheminftools.tools.featurizer import MolFeaturizer
+from cheminftools.tools import featurizer as chem_featurizer
 
 
 class TestMolFeaturizer:
@@ -14,7 +14,7 @@ class TestMolFeaturizer:
 
     @pytest.fixture
     def morgan_featurizer(self):
-        return MolFeaturizer(descriptor_type='morgan', params={'radius': 2, 'fpSize': 2048})
+        return chem_featurizer.MolFeaturizer(descriptor_type='morgan', params={'radius': 2, 'fpSize': 2048})
 
     def test_transform_one_morgan(self, smi, morgan_featurizer):
         X = morgan_featurizer.transform_one(smi)
@@ -32,37 +32,37 @@ class TestMolFeaturizer:
         assert X.max() > 1
 
     def test_transform_one_maccs(self, smi):
-        featurizer = MolFeaturizer(descriptor_type='maccs')
+        featurizer = chem_featurizer.MolFeaturizer(descriptor_type='maccs')
         X = featurizer.transform_one(smi)
         assert X.shape == (1, 167)
         assert featurizer.descriptor_type == 'maccs'
 
     def test_transform_one_atom_pairs(self, smi):
-        featurizer = MolFeaturizer(descriptor_type='atom_pairs', params={'fpSize': 2048})
+        featurizer = chem_featurizer.MolFeaturizer(descriptor_type='atom_pairs', params={'fpSize': 2048})
         X = featurizer.transform_one(smi)
         assert X.shape == (1, 2048)
         assert featurizer.descriptor_type == 'atom_pairs'
 
     def test_transform_one_erg(self, smi):
-        featurizer = MolFeaturizer(descriptor_type='erg')
+        featurizer = chem_featurizer.MolFeaturizer(descriptor_type='erg')
         X = featurizer.transform_one(smi)
         assert X.shape == (1, 315)
         assert featurizer.descriptor_type == 'erg'
 
     def test_transform_one_rdkit(self, smi):
-        featurizer = MolFeaturizer(descriptor_type='rdkit')
+        featurizer = chem_featurizer.MolFeaturizer(descriptor_type='rdkit')
         X = featurizer.transform_one(smi)
         assert X.shape == (1, 2048)
         assert featurizer.descriptor_type == 'rdkit'
 
     def test_transform_one_rdkit2d(self, smi):
-        featurizer = MolFeaturizer(descriptor_type='rdkit2d')
+        featurizer = chem_featurizer.MolFeaturizer(descriptor_type='rdkit2d')
         X = featurizer.transform_one(smi)
         assert X.shape == (1, 208)
         assert featurizer.descriptor_type == 'rdkit2d'
 
     def test_transform_one_torsion(self, smi):
-        featurizer = MolFeaturizer(descriptor_type='torsion', params={'fpSize': 2048})
+        featurizer = chem_featurizer.MolFeaturizer(descriptor_type='torsion', params={'fpSize': 2048})
         X = featurizer.transform_one(smi)
         assert X.shape == (1, 2048)
         assert featurizer.descriptor_type == 'torsion'
@@ -71,3 +71,11 @@ class TestMolFeaturizer:
         X = morgan_featurizer.transform([smi])
         assert X.max() == 1
         assert X.min() == 0
+
+    def test_transform_one_graph(self, smi):
+        featurizer = chem_featurizer.GraphFeaturizer()
+        X = featurizer.transform_one(smi)
+        assert X == 1
+
+if __name__ == '__main__':
+    pytest.main([__file__])

@@ -5,10 +5,6 @@ from rdkit import Chem
 
 
 class TestsSanitizer:
-    """
-    Pytests
-    """
-
     def test_check_stereo(self):
         smi = 'O=C1OC(CN1c1ccc(cc1)N1CCOCC1=O)CNC(=O)c1ccc(s1)Cl'
         smi2 = 'C1COCC(=O)N1C2=CC=C(C=C2)N3C[C@@H](OC3=O)CNC(=O)C4=CC=C(S4)Cl'
@@ -87,3 +83,6 @@ class TestsSanitizer:
         assert data_no_duplis['pIC50'].max() == 11.0
         assert data_no_duplis['pIC50'].min() == 1.0
         assert len(data_no_duplis) == 3
+
+if __name__ == '__main__':
+    pytest.main([__file__])
