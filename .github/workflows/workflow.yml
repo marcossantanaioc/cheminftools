@@ -17,14 +17,14 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.x'
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install
         run: |
           echo "Installing chemtools"
           python -m pip install --upgrade pip
           python setup.py install
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: chemtools_artifact
           path: .
@@ -32,8 +32,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.x'
       - name: flake8
@@ -52,9 +52,9 @@ jobs:
         id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
       steps:
       - name: Get chemtools
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: '3.x'
       - name: Install dependencies
