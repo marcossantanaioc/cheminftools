@@ -4,6 +4,7 @@ from rdkit import Chem
 import pytest
 import warnings
 
+
 class TestsSanitizer:
     def test_check_stereo(self):
         smi = "O=C1OC(CN1c1ccc(cc1)N1CCOCC1=O)CNC(=O)c1ccc(s1)Cl"
@@ -93,12 +94,13 @@ class TestsSanitizer:
             keep="first",
         )
         unique_smiles = set(data_no_duplis["SMILES"])
-        expected_smiles = set([
-            "c1ccccc1",
-            r"F/C=C\F",
-            "O=C(NC[C@@H]1CN(c2ccc(N3CCOCC3=O)cc2)C(=O)O1)c1ccc(Cl)s1",]
+        expected_smiles = set(
+            [
+                "c1ccccc1",
+                r"F/C=C\F",
+                "O=C(NC[C@@H]1CN(c2ccc(N3CCOCC3=O)cc2)C(=O)O1)c1ccc(Cl)s1",
+            ]
         )
-        warnings.warn(DeprecationWarning("Old"))
         assert unique_smiles.issubset(expected_smiles)
         assert data_no_duplis["pIC50"].max() == 11.0
         assert data_no_duplis["pIC50"].min() == 1.0
