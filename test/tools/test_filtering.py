@@ -44,3 +44,6 @@ class TestFiltering:
     def test_molfilter_from_df(self, smis_df, alcohol_catalog):
         alerts = MolFilter.from_df(df=smis_df, catalog=alcohol_catalog, smiles_column='SMILES')
         assert alerts['alert_name'].unique().item() == 'has_primary_alcohol'
+
+if __name__ == '__main__':
+    pytest.main([__file__])

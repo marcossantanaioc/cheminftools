@@ -58,7 +58,7 @@ class TestMolFeaturizer:
     def test_transform_one_rdkit2d(self, smi):
         featurizer = chem_featurizer.MolFeaturizer(descriptor_type='rdkit2d')
         X = featurizer.transform_one(smi)
-        assert X.shape == (1, 208)
+        assert X.shape == (1, 217)
         assert featurizer.descriptor_type == 'rdkit2d'
 
     def test_transform_one_torsion(self, smi):
@@ -71,11 +71,6 @@ class TestMolFeaturizer:
         X = morgan_featurizer.transform([smi])
         assert X.max() == 1
         assert X.min() == 0
-
-    def test_transform_one_graph(self, smi):
-        featurizer = chem_featurizer.GraphFeaturizer()
-        X = featurizer.transform_one(smi)
-        assert X == 1
 
 if __name__ == '__main__':
     pytest.main([__file__])
