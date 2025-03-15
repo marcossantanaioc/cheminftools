@@ -5,7 +5,7 @@ fastcore==1.7.29
 pandas==2.2.3
 numpy==2.2.3
 scipy==1.10.1
-scikit-learn==1.6.2
+scikit-learn==1.6.1
 rdkit==2024.9.6
 tqdm==4.67.1
 matplotlib==3.10.1
