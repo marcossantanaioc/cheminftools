@@ -1,11 +1,20 @@
+# Database
 psycopg2==2.9.6
+
+# Testing & Linting
 pytest==8.3.5
 flake8==7.1.2
-fastcore==1.7.29
+
+# Core Libraries
 pandas
 numpy
 scipy
 scikit-learn==1.6.1
+
+# Chemistry & Computational Tools
 rdkit==2024.9.6
+fastcore==1.7.29
+
+# Utilities & Visualization
 tqdm==4.67.1
 matplotlib==3.10.1
