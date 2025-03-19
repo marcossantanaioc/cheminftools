@@ -82,6 +82,10 @@ class TestMolFeaturizer:
         assert X.max() == 1
         assert X.min() == 0
 
+    def test_featurize_atom(self, smi):
+        mol = Chem.MolFromSmiles(smi)
+        assert mol == 1
+
 
 if __name__ == "__main__":
     pytest.main([__file__])
